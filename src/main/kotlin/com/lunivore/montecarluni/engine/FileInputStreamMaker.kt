@@ -1,10 +1,11 @@
-package com.lunivore.montecarluni
+package com.lunivore.montecarluni.engine
 
 import java.io.FileInputStream
 import java.io.InputStream
 
-class FileInputStreamMaker {
-    fun fileAsInputStream(filename: String): InputStream? {
+class FileInputStreamMaker : IMakeACsvInputStream {
+
+    override fun fileAsInputStream(filename: String): InputStream? {
         var stream = this.javaClass.getResourceAsStream(filename)
 
         if (stream == null) {
@@ -17,3 +18,4 @@ class FileInputStreamMaker {
         return stream
     }
 }
+

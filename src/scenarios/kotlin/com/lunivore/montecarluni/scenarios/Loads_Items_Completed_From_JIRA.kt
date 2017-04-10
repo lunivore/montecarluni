@@ -1,6 +1,6 @@
 package com.lunivore.montecarluni.scenarios
 
-import com.lunivore.montecarluni.MontecarluniApp
+import com.lunivore.montecarluni.app.MontecarluniApp
 import com.lunivore.stirry.Stirry
 import javafx.scene.control.Label
 import javafx.scene.control.TextField

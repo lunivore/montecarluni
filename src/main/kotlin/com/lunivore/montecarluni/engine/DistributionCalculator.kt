@@ -1,9 +1,9 @@
-package com.lunivore.montecarluni
+package com.lunivore.montecarluni.engine
 
 import java.time.LocalDateTime
 
-class DistributionCalculator {
-    fun calculateDistribution(completedDates : List<LocalDateTime>): List<Int> {
+class DistributionCalculator : ICalculateWeeklyDistribution {
+    override fun calculateDistribution(completedDates : List<LocalDateTime>): List<Int> {
         val lastCompletedDate = completedDates.max()
         val earliestCompletedDate = completedDates.min()
 
@@ -28,3 +28,4 @@ class DistributionCalculator {
         }
     }
 }
+

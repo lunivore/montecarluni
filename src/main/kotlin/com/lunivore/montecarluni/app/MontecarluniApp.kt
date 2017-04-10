@@ -1,5 +1,6 @@
-package com.lunivore.montecarluni
+package com.lunivore.montecarluni.app
 
+import com.lunivore.montecarluni.engine.MontecarluniController
 import javafx.application.Application
 import javafx.application.Platform
 import javafx.beans.property.StringProperty
@@ -19,10 +20,10 @@ class MontecarluniApp : Application() {
     val ln = System.getProperty("line.separator")
 
     override fun start(primaryStage: Stage) {
-        val engine = MontecarluniController()
-        val filenameInput = createFilenameImput(engine)
-        val importButton = createImportButton(engine)
-        val distributionOutput = createDistribtionOutput(engine)
+        val controller = MontecarluniController()
+        val filenameInput = createFilenameImput(controller)
+        val importButton = createImportButton(controller)
+        val distributionOutput = createDistribtionOutput(controller)
         val clipboardButton = createClipboardButton(distributionOutput.textProperty())
 
         val gridPane = GridPane()
@@ -31,7 +32,7 @@ class MontecarluniApp : Application() {
         gridPane.add(distributionOutput, 0, 2)
         gridPane.add(clipboardButton, 0, 3)
 
-        engine.setDistributionHandler({ ints ->
+        controller.setDistributionHandler({ ints ->
             val formatted = ints.fold("", {s, i -> s + ln + i})
             Platform.runLater {distributionOutput.textProperty().set(formatted)}
         })
@@ -53,7 +54,7 @@ class MontecarluniApp : Application() {
         Clipboard.getSystemClipboard().setContent(content)
     }
 
-    private fun  createDistribtionOutput(engine: MontecarluniController): Label {
+    private fun  createDistribtionOutput(controller: MontecarluniController): Label {
         val distributionOutput = Label()
         distributionOutput.id = "distributionOutput"
         distributionOutput.minWidth = 200.0
@@ -61,18 +62,19 @@ class MontecarluniApp : Application() {
         return distributionOutput
     }
 
-    private fun createFilenameImput(engine: MontecarluniController): TextField {
+    private fun createFilenameImput(controller: MontecarluniController): TextField {
         val textField = TextField()
         textField.id = "filenameInput"
-        textField.textProperty().addListener(ChangeListener {s, t, u -> engine.filenameChanged(textField.text)})
+        textField.textProperty().addListener(ChangeListener { s, t, u -> controller.filenameChanged(textField.text)})
         return textField
     }
 
 
-    private fun  createImportButton(engine: MontecarluniController): Button {
+    private fun  createImportButton(controller: MontecarluniController): Button {
         val button = Button("Import")
         button.id = "importButton"
-        button.addEventHandler(ActionEvent.ACTION, { engine.requestImport() })
+        button.addEventHandler(ActionEvent.ACTION, { controller.requestImport() })
         return button
     }
 }
+

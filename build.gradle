@@ -2,7 +2,7 @@ group 'lunivore.com'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.1.1'
+    ext.kotlinVersion = '1.1.1'
     ext.junitVersion  = '4.12'
     ext.mockitoVersion = '1.10.19'
     ext.testFxVersion = '4.0.6-alpha'
@@ -41,7 +41,7 @@ sourceSets {
 }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     compile "com.opencsv:opencsv:$openCsvVersion"
 
     testCompile("junit:junit:${junitVersion}")
@@ -52,6 +52,7 @@ dependencies {
     scenariosCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     scenariosCompile "com.opencsv:opencsv:$openCsvVersion"
     scenariosCompile("com.lunivore:stirry:1.0-SNAPSHOT")
+
     scenariosRuntime("junit:junit:${junitVersion}")
     scenariosRuntime("com.lunivore:stirry:1.0-SNAPSHOT")
 }
