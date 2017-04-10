@@ -1,6 +1,6 @@
 package com.lunivore.montecarluni.scenarios
 
-import com.lunivore.montecarluni.Montecarluni
+import com.lunivore.montecarluni.MontecarluniApp
 import com.lunivore.stirry.Stirry
 import javafx.scene.control.Label
 import javafx.scene.control.TextField
@@ -15,7 +15,7 @@ class Loads_Items_Completed_From_JIRA {
         @BeforeClass
         fun initializeStirry() {
             Stirry.initialize()
-            Stirry.startApp(Montecarluni())
+            Stirry.startApp(MontecarluniApp())
         }
     }
 
