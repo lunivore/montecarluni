@@ -1,0 +1,57 @@
+group 'lunivore.com'
+version '1.0-SNAPSHOT'
+
+buildscript {
+    ext.kotlin_version = '1.1.1'
+    ext.junitVersion  = '4.12'
+    ext.mockitoVersion = '1.10.19'
+    ext.testFxVersion = '4.0.6-alpha'
+    ext.openCsvVersion = '3.9'
+
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'kotlin'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+sourceSets {
+    scenarios {
+        kotlin {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir file('src/scenarios/kotlin')
+            resources.srcDirs = ["src/scenarios/resources"]
+        }
+    }
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "com.opencsv:opencsv:$openCsvVersion"
+
+    testCompile("junit:junit:${junitVersion}")
+    testCompile("org.mockito:mockito-all:${mockitoVersion}")
+    testRuntime("junit:junit:${junitVersion}")
+
+    scenariosCompile("junit:junit:${junitVersion}")
+    scenariosCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    scenariosCompile "com.opencsv:opencsv:$openCsvVersion"
+    scenariosCompile("com.lunivore:stirry:1.0-SNAPSHOT")
+    scenariosRuntime("junit:junit:${junitVersion}")
+    scenariosRuntime("com.lunivore:stirry:1.0-SNAPSHOT")
+}
