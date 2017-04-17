@@ -3,9 +3,9 @@ package com.lunivore.montecarluni.engine
 import java.io.FileInputStream
 import java.io.InputStream
 
-class FileInputStreamMaker : IMakeACsvInputStream {
+class ResourceOrFilepathFetcher : IFetchFilesAsInputStreams {
 
-    override fun fileAsInputStream(filename: String): InputStream? {
+    override fun fetch(filename: String): InputStream {
         var stream = this.javaClass.getResourceAsStream(filename)
 
         if (stream == null) {
