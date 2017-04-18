@@ -19,6 +19,8 @@ class Loads_Items_Completed_From_JIRA {
         }
     }
 
+    // By the way, this is a terrible scenario but the outcome isn't quite working yet, so I'm all good with that.
+    // It's just here to run the prototype.
     @Test
     fun JIRA_of_completed_only_loads_fine() {
         // Given a JIRA file with only completed items
