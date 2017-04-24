@@ -33,7 +33,7 @@ class MontecarluniApp : Application() {
         gridPane.add(clipboardButton, 0, 3)
 
         controller.setDistributionHandler({ ints ->
-            val formatted = ints.fold("", {s, i -> s + ln + i})
+            val formatted = ints.joinToString(ln)
             Platform.runLater {distributionOutput.textProperty().set(formatted)}
         })
 
@@ -51,7 +51,7 @@ class MontecarluniApp : Application() {
     private fun requestClipboard(text: StringProperty) {
         val content = ClipboardContent()
         content.putString(text.get())
-        Clipboard.getSystemClipboard().setContent(content)
+        Platform.runLater{Clipboard.getSystemClipboard().setContent(content)}
     }
 
     private fun  createDistribtionOutput(controller: MontecarluniController): Label {
