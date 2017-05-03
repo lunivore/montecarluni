@@ -42,12 +42,12 @@ class Loads_Items_Completed_From_JIRA {
         val distributionControl = Stirry.find<Label> {it.id == "distributionOutput"}
         val distributions = distributionControl?.text
 
-        val expected = listOf<Int>(6, 15, 3, 14, 2, 5, 6, 8, 5, 10, 15, 4, 2, 1).joinToString(ln)
+        val expected = listOf<Int>(6, 15, 3, 14, 2, 5, 6, 8, 5, 10, 15, 4, 2, 1).joinToString("\n")
         assertEquals(expected, distributions)
     }
 
     @Test
-    fun can_copy_results_to_clipboard() {
+    fun can_copy_results_to_clipboard_for_excel() {
         // Given a JIRA file with only completed items
         val filename = "/Closed Only JIRA.csv"
 
@@ -66,7 +66,7 @@ class Loads_Items_Completed_From_JIRA {
 
         // Then we should have something we can paste into Excel
 
-        val expected = listOf<Int>(6, 15, 3, 14, 2, 5, 6, 8, 5, 10, 15, 4, 2, 1).joinToString(ln)
+        val expected = listOf<Int>(6, 15, 3, 14, 2, 5, 6, 8, 5, 10, 15, 4, 2, 1).joinToString("\n")
         assertEquals(expected, text)
     }
 

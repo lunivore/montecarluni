@@ -17,7 +17,7 @@ import javafx.stage.Stage
 
 class MontecarluniApp : Application() {
 
-    val ln = System.getProperty("line.separator")
+    val lineSeparatorForExcel = "\n"
 
     override fun start(primaryStage: Stage) {
         val controller = MontecarluniController()
@@ -33,7 +33,7 @@ class MontecarluniApp : Application() {
         gridPane.add(clipboardButton, 0, 3)
 
         controller.setDistributionHandler({ ints ->
-            val formatted = ints.joinToString(ln)
+            val formatted = ints.joinToString(lineSeparatorForExcel)
             Platform.runLater {distributionOutput.textProperty().set(formatted)}
         })
 
