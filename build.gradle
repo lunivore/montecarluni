@@ -7,12 +7,13 @@ buildscript {
     ext.mockitoVersion = '1.10.19'
     ext.testFxVersion = '4.0.6-alpha'
     ext.openCsvVersion = '3.9'
+    ext.kodeinVersion = '3.4.1'
 
     repositories {
         mavenCentral()
     }
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
     }
 }
 
@@ -43,16 +44,19 @@ sourceSets {
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     compile "com.opencsv:opencsv:$openCsvVersion"
+    compile "com.github.salomonbrys.kodein:kodein:$kodeinVersion"
 
     testCompile("junit:junit:${junitVersion}")
     testCompile("org.mockito:mockito-all:${mockitoVersion}")
     testRuntime("junit:junit:${junitVersion}")
 
     scenariosCompile("junit:junit:${junitVersion}")
-    scenariosCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    scenariosCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     scenariosCompile "com.opencsv:opencsv:$openCsvVersion"
     scenariosCompile("com.lunivore:stirry:1.0-SNAPSHOT")
+    scenariosCompile "com.github.salomonbrys.kodein:kodein:$kodeinVersion"
 
     scenariosRuntime("junit:junit:${junitVersion}")
     scenariosRuntime("com.lunivore:stirry:1.0-SNAPSHOT")
+    scenariosRuntime "com.github.salomonbrys.kodein:kodein:$kodeinVersion"
 }
