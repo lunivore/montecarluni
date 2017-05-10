@@ -1,5 +1,5 @@
 group 'lunivore.com'
-version '1.0-SNAPSHOT'
+version '0.0.1-20170509'
 
 buildscript {
     ext.kotlinVersion = '1.1.1'
@@ -8,6 +8,7 @@ buildscript {
     ext.testFxVersion = '4.0.6-alpha'
     ext.openCsvVersion = '3.9'
     ext.kodeinVersion = '3.4.1'
+    ext.stirryVersion = '0.0.1-20170509'
 
     repositories {
         mavenCentral()
@@ -24,7 +25,6 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
-
     flatDir {
         dirs 'libs'
     }
@@ -41,6 +41,18 @@ sourceSets {
     }
 }
 
+// I would love to use an Ivy patterned repository instead. Unfortunately Ivy calls HEAD,
+// which causes Github to return a 403 error "Forbidden". Copying it to a local lib directory
+// is the next best thing. Maybe one day Stirry will be releasable too.
+task("copyStirry") {
+    if(!file("libs/stirry-${stirryVersion}.jar").exists()) {
+        ant.get(src: "http://github.com/lunivore/Stirry/releases/download/$stirryVersion/stirry-${stirryVersion}.jar",
+                dest: "libs",
+                skipexisting: true)
+    }
+}
+scenariosClasses.dependsOn("copyStirry")
+
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     compile "com.opencsv:opencsv:$openCsvVersion"
@@ -53,10 +65,30 @@ dependencies {
     scenariosCompile("junit:junit:${junitVersion}")
     scenariosCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     scenariosCompile "com.opencsv:opencsv:$openCsvVersion"
-    scenariosCompile("com.lunivore:stirry:1.0-SNAPSHOT")
     scenariosCompile "com.github.salomonbrys.kodein:kodein:$kodeinVersion"
+    scenariosCompile ("com.lunivore.stirry:stirry:$stirryVersion")
 
     scenariosRuntime("junit:junit:${junitVersion}")
-    scenariosRuntime("com.lunivore:stirry:1.0-SNAPSHOT")
+    scenariosRuntime("com.lunivore.stirry:stirry:$stirryVersion")
     scenariosRuntime "com.github.salomonbrys.kodein:kodein:$kodeinVersion"
+}
+
+jar {
+    from {
+        configurations.runtime.collect { it.isDirectory()? it : zipTree(it) }
+    }{
+        exclude "META-INF/*.*"
+        exclude "META-INF/maven/**"
+
+        // I can't work out why these appear in my jar in the first place.
+        // They don't appear in my dependency tree.
+        exclude "org/intellij/**"
+        exclude "org/jetbrains/**"
+    }
+    from('.') {
+        include 'LICENSE*.txt'
+    }
+    manifest {
+        attributes 'Main-Class': 'com.lunivore.montecarluni.Montecarluni'
+    }
 }

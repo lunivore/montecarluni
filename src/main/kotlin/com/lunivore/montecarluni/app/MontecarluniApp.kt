@@ -26,7 +26,7 @@ class MontecarluniApp(var kodein: Kodein) : Application() {
         val controller : MontecarluniController = kodein.instance()
 
         val root = FXMLLoader.load<Parent>(javaClass.classLoader.getResource(
-                "montecarluni_app.fxml"))
+                "com/lunivore/montecarluni/app/montecarluni_app.fxml"))
 
         val importButton = (root.lookup("#importButton") as Button)
         importButton.addEventHandler(
