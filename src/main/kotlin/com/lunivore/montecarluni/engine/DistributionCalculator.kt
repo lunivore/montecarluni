@@ -1,17 +1,18 @@
 package com.lunivore.montecarluni.engine
 
+import com.lunivore.montecarluni.model.Record
 import java.time.LocalDateTime
 
 class DistributionCalculator : ICalculateWeeklyDistribution {
-    override fun calculateDistribution(completedDates : List<LocalDateTime>): List<Int> {
-        val lastCompletedDate = completedDates.max()
-        val earliestCompletedDate = completedDates.min()
+    override fun calculateDistribution(completedDates: List<Record>): List<Int> {
+        val lastCompletedDate = completedDates.maxBy {it.resolvedDate}
+        val earliestCompletedDate = completedDates.minBy {it.resolvedDate}
 
         val dateBrackets = mutableListOf<Pair<LocalDateTime, LocalDateTime>>()
-        var processedDate = lastCompletedDate
+        var processedDate = lastCompletedDate?.resolvedDate
 
         while (processedDate != null &&
-                processedDate.compareTo(earliestCompletedDate) > 0) {
+                processedDate.compareTo(earliestCompletedDate?.resolvedDate) > 0) {
 
             var nextDate = processedDate.minusDays(7)
             dateBrackets.add(Pair(nextDate, processedDate))
@@ -21,9 +22,11 @@ class DistributionCalculator : ICalculateWeeklyDistribution {
         return dateBrackets.map {
             bracket ->
             completedDates.count {
-                (it.isAfter(bracket.first) &&
-                        it.isBefore(bracket.second)) ||
-                        it.isEqual(bracket.second)
+                with(it.resolvedDate) {
+                    (isAfter(bracket.first) &&
+                    isBefore(bracket.second)) ||
+                    isEqual(bracket.second)
+                }
             }
         }
     }

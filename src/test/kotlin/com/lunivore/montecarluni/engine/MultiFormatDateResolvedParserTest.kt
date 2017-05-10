@@ -1,5 +1,6 @@
 package com.lunivore.montecarluni.engine
 
+import com.lunivore.montecarluni.model.Record
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.io.ByteArrayInputStream
@@ -26,7 +27,7 @@ class MultiFormatDateResolvedParserTest {
         val expectedResults = listOf<LocalDateTime>(
                 LocalDateTime.of(2017, 1, 21, 14, 34),
                 LocalDateTime.of(2017, 2, 2, 9, 0),
-                LocalDateTime.of(2016, 12, 29, 12, 20))
+                LocalDateTime.of(2016, 12, 29, 12, 20)).map { Record(it) }
 
         assertEquals(expectedResults, results)
     }
@@ -47,10 +48,10 @@ class MultiFormatDateResolvedParserTest {
         val results = inputStreams.map {parser.parseResolvedDates(it)}
 
         // Then it should be able to resolve those dates.
-        val expectedResults = listOf<LocalDateTime>(
+        val expectedResults = listOf(
                 LocalDateTime.of(2017,4,3,8,25),
                 LocalDateTime.of(2017,1,1,13,27),
-                LocalDateTime.of(2016,9,8,8,15))
+                LocalDateTime.of(2016,9,8,8,15)).map { Record(it) }
 
         assertEquals(expectedResults, results.flatMap { it })
     }
@@ -80,7 +81,7 @@ class MultiFormatDateResolvedParserTest {
                 LocalDateTime.of(2017, 5, 21, 10, 1),
                 LocalDateTime.of(2017, 5, 2, 11, 0),
                 LocalDateTime.of(2017, 5, 12, 14, 0),
-                LocalDateTime.of(2017, 1, 12, 11, 0))
+                LocalDateTime.of(2017, 1, 12, 11, 0)).map{ Record(it) }
 
         assertEquals(expectedResults, results)
     }

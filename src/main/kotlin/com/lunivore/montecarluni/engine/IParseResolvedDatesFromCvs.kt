@@ -1,9 +1,9 @@
 package com.lunivore.montecarluni.engine
 
+import com.lunivore.montecarluni.model.Record
 import java.io.InputStream
-import java.time.LocalDateTime
 
 interface IParseResolvedDatesFromCvs {
-    fun parseResolvedDates(stream: InputStream): List<LocalDateTime>
+    fun parseResolvedDates(stream: InputStream): List<Record>
 
 }

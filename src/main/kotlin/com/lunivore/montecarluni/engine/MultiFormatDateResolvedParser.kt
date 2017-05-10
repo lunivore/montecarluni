@@ -1,5 +1,6 @@
 package com.lunivore.montecarluni.engine
 
+import com.lunivore.montecarluni.model.Record
 import com.opencsv.CSVReader
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -20,7 +21,7 @@ class MultiFormatDateResolvedParser : IParseResolvedDatesFromCvs {
      *
      * Formats with the month at the start do not make sense and will not be supported.
      */
-    override fun parseResolvedDates(stream: InputStream): List<LocalDateTime> {
+    override fun parseResolvedDates(stream: InputStream): List<Record> {
         val csv = CSVReader(InputStreamReader(stream))
         var lines = csv.readAll()
         if (lines.size < 2) { throw IllegalArgumentException("Csv file requires a header row and at least one row of data.") }
@@ -34,7 +35,7 @@ class MultiFormatDateResolvedParser : IParseResolvedDatesFromCvs {
                 }
         val dateFormat = parseDateFormat(datesAsLines)
 
-        return datesAsLines.map {LocalDateTime.parse(it, dateFormat) }
+        return datesAsLines.map { Record(LocalDateTime.parse(it, dateFormat)) }
 
     }
 

@@ -1,8 +1,8 @@
 package com.lunivore.montecarluni.engine
 
-import java.time.LocalDateTime
+import com.lunivore.montecarluni.model.Record
 
 interface ICalculateWeeklyDistribution {
-    fun calculateDistribution(completedDates : List<LocalDateTime>): List<Int>
+    fun calculateDistribution(completedDates: List<Record>): List<Int>
 
 }
