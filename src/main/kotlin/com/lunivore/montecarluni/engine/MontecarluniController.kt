@@ -1,14 +1,14 @@
 package com.lunivore.montecarluni.engine
 
 class MontecarluniController(
-        val fileInputStreamMaker: IFetchFilesAsInputStreams,
+        val fileInputStreamMaker: IProvideInputStreams,
         val csvParser: IParseResolvedDatesFromCvs,
         val distributionCalculator: ICalculateWeeklyDistribution) {
 
     private var  filename: String = ""
     private var distributionChangedHandler : (List<Int>) -> Unit = {}
 
-    constructor() : this(ResourceOrFilepathFetcher(), MultiFormatDateResolvedParser(), DistributionCalculator()) {
+    constructor() : this(FileInputStreamProvider(), MultiFormatDateResolvedParser(), DistributionCalculator()) {
     }
 
     fun requestImport() {

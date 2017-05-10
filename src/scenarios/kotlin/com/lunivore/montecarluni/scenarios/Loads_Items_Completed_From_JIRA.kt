@@ -32,9 +32,10 @@ class Loads_Items_Completed_From_JIRA {
     fun JIRA_of_completed_only_loads_fine() {
         // Given a JIRA file with only completed items
         val filename = "/Closed Only JIRA.csv"
+        val file = this.javaClass.getResource(filename)
 
         // When Montecarluni imports it
-        Stirry.setText({it is TextField }, filename)
+        Stirry.setText({it is TextField }, file.toURI().path)
         Stirry.buttonClick { it.text == "Import" }
 
         // Then it should automatically work out the number of
@@ -50,9 +51,10 @@ class Loads_Items_Completed_From_JIRA {
     fun can_copy_results_to_clipboard_for_excel() {
         // Given a JIRA file with only completed items
         val filename = "/Closed Only JIRA.csv"
+        val file = this.javaClass.getResource(filename)
 
         // When we import it and copy it to the clipboard
-        Stirry.setText({it is TextField }, filename)
+        Stirry.setText({it is TextField }, file.toURI().path)
         Stirry.buttonClick { it.text == "Import" }
         Stirry.buttonClick { it.text == "Copy to Clipboard" }
 

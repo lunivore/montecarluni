@@ -12,7 +12,7 @@ import javafx.stage.Stage
 class Montecarluni : Application() {
     override fun start(primaryStage: Stage) {
         val kodein = Kodein {
-            bind<IFetchFilesAsInputStreams>() with singleton { ResourceOrFilepathFetcher() }
+            bind<IProvideInputStreams>() with singleton { FileInputStreamProvider() }
             bind<ICalculateWeeklyDistribution>() with singleton { DistributionCalculator() }
             bind<IParseResolvedDatesFromCvs>() with singleton { MultiFormatDateResolvedParser() }
             bind<MontecarluniController>() with singleton { MontecarluniController(instance(), instance(), instance())}
