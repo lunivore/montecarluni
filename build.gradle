@@ -41,10 +41,17 @@ sourceSets {
     }
 }
 
+//// Using Stirry from Github for scenarios
+//
 // I would love to use an Ivy patterned repository instead. Unfortunately Ivy calls HEAD,
 // which causes Github to return a 403 error "Forbidden". Copying it to a local lib directory
 // is the next best thing. Maybe one day Stirry will be releasable too.
+////
+clean {
+    delete("libs")
+}
 task("copyStirry") {
+    if(!file("libs").exists()) { file("libs").mkdir() }
     if(!file("libs/stirry-${stirryVersion}.jar").exists()) {
         ant.get(src: "http://github.com/lunivore/Stirry/releases/download/$stirryVersion/stirry-${stirryVersion}.jar",
                 dest: "libs",
@@ -52,6 +59,7 @@ task("copyStirry") {
     }
 }
 scenariosClasses.dependsOn("copyStirry")
+// End using Stirry from Github
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
