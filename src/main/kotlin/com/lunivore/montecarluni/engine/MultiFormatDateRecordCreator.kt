@@ -7,7 +7,7 @@ import java.io.InputStreamReader
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class MultiFormatDateResolvedParser : IParseResolvedDatesFromCvs {
+class MultiFormatDateRecordCreator : ICreateRecordsFromCvs {
 
     private val alreadyCheckedExceptionMsg = "This should never happen but checking it keeps Kotlin happy."
 
@@ -26,17 +26,27 @@ class MultiFormatDateResolvedParser : IParseResolvedDatesFromCvs {
         var lines = csv.readAll()
         if (lines.size < 2) { throw IllegalArgumentException("Csv file requires a header row and at least one row of data.") }
 
-        val doneIndex = lines[0].indexOfFirst { it == "Resolved" }
+        val resolvedIndex = lines[0].indexOfFirst { it == "Resolved" }
+        val updatedIndex = lines[0].indexOfFirst { it == "Updated" }
 
-        val datesAsLines = lines.subList(1, lines.size)
+        val resolveDatesAsLines = extractDate(lines, resolvedIndex)
+        val updatedDatesAsLines = extractDate(lines, updatedIndex)
+
+        val candidatesForDateFormat = resolveDatesAsLines.plus(updatedDatesAsLines).filter { it.isNotEmpty() }
+        val dateFormat = parseDateFormat(candidatesForDateFormat)
+
+        return resolveDatesAsLines.zip(updatedDatesAsLines).map {
+            Record(if (it.first.isEmpty()) null else LocalDateTime.parse(it.first, dateFormat),
+                    if (it.second.isEmpty()) null else LocalDateTime.parse(it.second, dateFormat)) }
+
+    }
+
+    private fun extractDate(lines: MutableList<Array<String>>, resolvedIndex: Int): List<String> {
+        return lines.subList(1, lines.size)
                 .fold(listOf<String>()) { dates, value ->
-                    if (value != null) dates.plus(value[doneIndex])
+                    if (value != null) dates.plus(value[resolvedIndex])
                     else dates
                 }
-        val dateFormat = parseDateFormat(datesAsLines)
-
-        return datesAsLines.map { Record(LocalDateTime.parse(it, dateFormat)) }
-
     }
 
     private fun  parseDateFormat(dateTimes: List<String>): DateTimeFormatter? {

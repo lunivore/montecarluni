@@ -14,7 +14,7 @@ class Montecarluni : Application() {
         val kodein = Kodein {
             bind<IProvideInputStreams>() with singleton { FileInputStreamProvider() }
             bind<ICalculateWeeklyDistribution>() with singleton { DistributionCalculator() }
-            bind<IParseResolvedDatesFromCvs>() with singleton { MultiFormatDateResolvedParser() }
+            bind<ICreateRecordsFromCvs>() with singleton { MultiFormatDateRecordCreator() }
             bind<MontecarluniController>() with singleton { MontecarluniController(instance(), instance(), instance())}
         }
 

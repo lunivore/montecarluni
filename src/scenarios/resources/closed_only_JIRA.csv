@@ -1,0 +1,97 @@
+Key,Summary,Status,Resolution,Created,Updated,Resolved
+LUNI-753,Investigate how to forge Daedric weapons,Done,Complete,22/Mar/2017 5:30 PM,05/Apr/2017 2:35 PM,05/Apr/2017 2:35 PM
+LUNI-720,Final UI design for dragon wings,Done,Complete,14/Mar/2017 9:24 AM,28/Mar/2017 10:22 AM,28/Mar/2017 10:22 AM
+LUNI-719,"Final UX design for horses, including saddles",Done,Complete,14/Mar/2017 9:23 AM,28/Mar/2017 1:33 PM,28/Mar/2017 1:33 PM
+LUNI-718,Extend personas to include selling,Done,Delivered,14/Mar/2017 9:16 AM,22/Mar/2017 11:50 AM,22/Mar/2017 11:50 AM
+LUNI-709,Spike - location and navigation approach,Done,Complete,09/Mar/2017 1:41 PM,28/Mar/2017 1:01 PM,28/Mar/2017 1:01 PM
+LUNI-697,Build guard no-entry requirement based on unconvincing disguise,Done,Complete,07/Mar/2017 8:35 AM,14/Mar/2017 4:29 PM,
+LUNI-689,Spike - Manage save games,Done,Complete,01/Mar/2017 3:44 PM,15/Mar/2017 10:02 AM,
+LUNI-688,Redux form abstraction to dynamically create NPCs,Done,Complete,01/Mar/2017 12:09 PM,13/Mar/2017 11:29 AM,
+LUNI-687,Make Hearthfire home build portable,Done,Complete,01/Mar/2017 12:07 PM,08/Mar/2017 11:39 AM,08/Mar/2017 11:39 AM
+LUNI-677,Define and agree research strategy for prices wrt speech skill,Done,Complete,28/Feb/2017 2:27 PM,28/Mar/2017 11:02 AM,28/Mar/2017 11:02 AM
+LUNI-676,UX - Start UX for caravan seller locations,Done,Complete,28/Feb/2017 2:25 PM,28/Mar/2017 11:02 AM,28/Mar/2017 11:02 AM
+LUNI-664,Multiplayer infrastructure setup,Done,Complete,23/Feb/2017 12:00 PM,22/Mar/2017 1:39 PM,22/Mar/2017 1:39 PM
+LUNI-663,Refactor boxes for Imperial Mail,Done,Complete,23/Feb/2017 9:28 AM,28/Mar/2017 9:14 AM,28/Mar/2017 9:14 AM
+LUNI-662,Clean up of code in mail boxes and mock postal service,Done,Complete,23/Feb/2017 9:24 AM,22/Mar/2017 1:40 PM,22/Mar/2017 1:40 PM
+LUNI-661,Spike - Transition from marketplace to outside gates on guard detection,Done,Complete,23/Feb/2017 9:21 AM,15/Mar/2017 10:03 AM,15/Mar/2017 10:03 AM
+LUNI-660,Spike - Transition from shop to outside gates on guard detection,Done,Complete,23/Feb/2017 9:19 AM,15/Mar/2017 10:02 AM,15/Mar/2017 10:02 AM
+LUNI-651,Spike - NPC framework,Done,Complete,21/Feb/2017 12:36 PM,28/Feb/2017 8:48 AM,28/Feb/2017 8:48 AM
+LUNI-649,Implement code review comments for 'Create Guard to allow entry',Done,Done,20/Feb/2017 2:28 PM,28/Feb/2017 8:58 AM,28/Feb/2017 8:58 AM
+LUNI-641,May need to build UI instance for every Morrowind book,Resolved,Complete,17/Feb/2017 4:32 PM,24/Mar/2017 5:04 PM,24/Mar/2017 5:04 PM
+LUNI-639,Tech lead resource,Closed,Mitigated,17/Feb/2017 4:21 PM,20/Feb/2017 7:29 PM,20/Feb/2017 7:29 PM
+LUNI-638,Update test data to support SkyProccer tests,Done,Done,17/Feb/2017 10:40 AM,06/Mar/2017 10:08 AM,06/Mar/2017 10:08 AM
+LUNI-608,Hide feedback button on existing selling / buying dialogue,Done,Complete,15/Feb/2017 11:44 AM,20/Feb/2017 10:25 AM,20/Feb/2017 10:25 AM
+LUNI-606,Move gate entry to guards' AI package,Done,Done,14/Feb/2017 11:04 AM,20/Feb/2017 1:38 PM,20/Feb/2017 1:38 PM
+LUNI-605,Add gates to Windhelm,Done,Done,14/Feb/2017 8:52 AM,20/Feb/2017 1:49 PM,20/Feb/2017 1:49 PM
+LUNI-560,Dragon style guide - colour palatte and accessibility,Done,Delivered,13/Feb/2017 8:24 PM,05/Apr/2017 11:38 AM,05/Apr/2017 11:38 AM
+LUNI-549,Dragons - Complete prototype for testing eggs,Done,Complete,13/Feb/2017 5:46 PM,16/Mar/2017 8:20 AM,16/Mar/2017 8:20 AM
+LUNI-547,Dragons - Complete prototype for testing unidentified eggs,Done,Complete,13/Feb/2017 5:44 PM,16/Mar/2017 8:20 AM,16/Mar/2017 8:20 AM
+LUNI-541,Configure logging path and set up for Papyrus across all environments,Done,Complete,13/Feb/2017 2:52 PM,27/Mar/2017 2:42 PM,27/Mar/2017 2:42 PM
+LUNI-537,Update Imperial Mail for heavy package pricing,Done,Complete,13/Feb/2017 11:02 AM,13/Feb/2017 4:06 PM,13/Feb/2017 4:06 PM
+LUNI-536,UI Developer resource,Resolved,Complete,10/Feb/2017 5:04 PM,24/Mar/2017 5:03 PM,24/Mar/2017 5:03 PM
+LUNI-532,Update Imperial Mail to concatenate pricing for small and large items,Done,Complete,07/Feb/2017 4:07 PM,14/Feb/2017 1:30 PM,14/Feb/2017 1:30 PM
+LUNI-528,Create save game overload confirmation,Done,Complete,07/Feb/2017 1:47 PM,14/Mar/2017 2:46 PM,14/Mar/2017 2:46 PM
+LUNI-527,Create save game confirmation for new save,Done,Done,07/Feb/2017 1:45 PM,14/Feb/2017 1:54 PM,14/Feb/2017 1:54 PM
+LUNI-526,Team Space,Resolved,Complete,07/Feb/2017 12:56 PM,24/Mar/2017 5:02 PM,24/Mar/2017 5:02 PM
+LUNI-513,Develop the map,Done,Complete,06/Feb/2017 1:45 PM,13/Feb/2017 10:53 AM,13/Feb/2017 10:53 AM
+LUNI-474,New Shrine code implementation,Done,Complete,05/Feb/2017 8:05 PM,28/Mar/2017 9:22 AM,28/Mar/2017 9:22 AM
+LUNI-457,Define and agree test strategy,Done,Complete,03/Feb/2017 1:04 PM,27/Feb/2017 4:51 PM,27/Feb/2017 4:51 PM
+LUNI-456,Create and maintain session,Done,Complete,03/Feb/2017 8:21 AM,06/Apr/2017 10:05 AM,06/Apr/2017 10:05 AM
+LUNI-454,Update Imperial Mail with mock order to enable Whiterun shipments,Done,Complete,01/Feb/2017 5:36 PM,03/Feb/2017 10:04 AM,03/Feb/2017 10:04 AM
+LUNI-449,Define and implement framework for triggering events,Done,Complete,31/Jan/2017 12:33 PM,15/Mar/2017 6:15 PM,15/Mar/2017 6:15 PM
+LUNI-438,Proceed to marketplace from shop,Done,Complete,30/Jan/2017 5:03 PM,05/Apr/2017 3:12 PM,05/Apr/2017 3:12 PM
+LUNI-437,Proceed to marketplace from gates,Done,Complete,30/Jan/2017 5:01 PM,30/Mar/2017 9:21 AM,30/Mar/2017 9:21 AM
+LUNI-434,UX - Prototype and testing for payment,Done,Complete,30/Jan/2017 4:44 PM,15/Feb/2017 11:58 AM,15/Feb/2017 11:58 AM
+LUNI-431,Default all couriers to old mailbox,Done,Done,30/Jan/2017 4:33 PM,09/Feb/2017 11:00 AM,09/Feb/2017 11:00 AM
+LUNI-393,UI - Complete designs for save game loads,Done,Complete,26/Jan/2017 4:43 PM,01/Feb/2017 8:57 AM,01/Feb/2017 8:57 AM
+LUNI-390,Investigate current implementation for Imperial Couriers,Done,Complete,26/Jan/2017 8:55 AM,21/Feb/2017 11:17 AM,21/Feb/2017 11:17 AM
+LUNI-387,Investigate whether it is possible to have one courier or if many are required,Done,Done,25/Jan/2017 1:55 PM,26/Jan/2017 10:44 AM,26/Jan/2017 10:44 AM
+LUNI-368,Build service to identify courier type,Done,Complete,24/Jan/2017 4:19 PM,14/Mar/2017 9:30 AM,14/Mar/2017 9:30 AM
+LUNI-361,Define and agree approach for couriers,Done,Complete,24/Jan/2017 4:10 PM,01/Mar/2017 10:43 AM,01/Mar/2017 10:43 AM
+LUNI-352,Update Imperial Mail city chooser to match changes by team Pony,Done,Complete,24/Jan/2017 10:45 AM,06/Feb/2017 8:45 AM,06/Feb/2017 8:45 AM
+LUNI-330,API - Imperial Mail - Courier details,Done,Complete,09/Dec/2016 11:58 AM,04/Jan/2017 9:29 AM,04/Jan/2017 9:29 AM
+LUNI-324,Logging Framework for Papyrus and SkyProccer,Done,Done,23/Jan/2017 11:13 AM,27/Jan/2017 12:35 PM,27/Jan/2017 12:35 PM
+LUNI-323,Define Map structure,Done,Done,23/Jan/2017 11:11 AM,25/Jan/2017 5:31 PM,25/Jan/2017 5:31 PM
+LUNI-310,Approach to content within stores,Done,Complete,20/Jan/2017 1:21 PM,15/Feb/2017 12:09 PM,15/Feb/2017 12:09 PM
+LUNI-309,Update Imperial Mail to return unclaimed items,Done,Complete,20/Jan/2017 11:38 AM,20/Jan/2017 4:47 PM,20/Jan/2017 4:47 PM
+LUNI-300,Refactor' Imperial Mail and couriers,Done,Complete,20/Jan/2017 8:57 AM,08/Feb/2017 10:00 AM,08/Feb/2017 10:00 AM
+LUNI-296,Investigate Mail Account Integration,Done,Done,20/Jan/2017 8:53 AM,06/Feb/2017 3:40 PM,06/Feb/2017 3:40 PM
+LUNI-281,Build Imperial Mail service to reset deliveries,Done,Done,17/Jan/2017 9:12 AM,14/Feb/2017 12:19 PM,14/Feb/2017 12:19 PM
+LUNI-279,Investigate whether returned items should end up in houses,Done,Complete,17/Jan/2017 9:10 AM,25/Jan/2017 10:43 AM,25/Jan/2017 10:43 AM
+LUNI-274,Investigate lockpicking vs guards,Done,Complete,17/Jan/2017 9:04 AM,26/Jan/2017 8:29 AM,26/Jan/2017 8:29 AM
+LUNI-273,Build quest-driven entry service,Done,Complete,17/Jan/2017 9:02 AM,14/Mar/2017 1:18 PM,14/Mar/2017 1:18 PM
+LUNI-269,Create entry service for NPCs,Done,Done,17/Jan/2017 8:54 AM,23/Feb/2017 5:16 PM,23/Feb/2017 5:16 PM
+LUNI-265,Create import game service,Done,Done,17/Jan/2017 8:49 AM,20/Feb/2017 2:11 PM,20/Feb/2017 2:11 PM
+LUNI-260,"UX - Complete Design for wolves, deer etc.",Done,Complete,16/Jan/2017 12:39 PM,20/Jan/2017 10:41 AM,20/Jan/2017 10:41 AM
+LUNI-256,UI - Prototype and Testing for Placement of Mail Items within Mailbox (Windhelm),Done,Delivered,16/Jan/2017 12:24 PM,27/Jan/2017 3:57 PM,27/Jan/2017 3:57 PM
+LUNI-255,UI - Prototype and Testing for Placement of Mail Items within Mailbox (Whiterun),Done,Complete,16/Jan/2017 10:45 AM,01/Feb/2017 8:51 AM,01/Feb/2017 8:51 AM
+LUNI-253,Placement of mailboxes in cities,Done,Done,16/Jan/2017 9:25 AM,05/Apr/2017 12:21 PM,05/Apr/2017 12:21 PM
+LUNI-251,(PoC) Confirm transport on mail accounts,Done,Complete,16/Jan/2017 9:22 AM,28/Mar/2017 9:14 AM,28/Mar/2017 9:14 AM
+LUNI-249,Mailbox Knowledge Transfer,Done,Complete,11/Jan/2017 2:33 PM,01/Feb/2017 8:52 AM,01/Feb/2017 8:52 AM
+LUNI-248,"Add Mailbox and Courier to Solitude, Markarth, Falkreath",Done,Complete,11/Jan/2017 2:02 PM,27/Jan/2017 2:43 PM,27/Jan/2017 2:43 PM
+LUNI-238,"Payment Research, Feedback and Layout",Done,Complete,10/Jan/2017 5:22 PM,01/Feb/2017 8:56 AM,01/Feb/2017 8:56 AM
+LUNI-237,Implement data layer for mailbox MCM,Done,Complete,10/Jan/2017 5:05 PM,15/Mar/2017 6:16 PM,15/Mar/2017 6:16 PM
+LUNI-234,Spike - Transition from New mailbox page to delivery page,Done,Complete,10/Jan/2017 4:40 PM,15/Mar/2017 10:03 AM,15/Mar/2017 10:03 AM
+LUNI-218,(PoC) Submit mail with account payment,Done,Complete,09/Jan/2017 4:27 PM,28/Mar/2017 9:14 AM,28/Mar/2017 9:14 AM
+LUNI-215,(PoC) Correct account payment entry depending on balance,Done,Complete,09/Jan/2017 4:27 PM,28/Mar/2017 9:14 AM,28/Mar/2017 9:14 AM
+LUNI-161,Spike - Request quest-driven entry,Done,Complete,06/Jan/2017 4:51 PM,20/Jan/2017 10:10 AM,20/Jan/2017 10:10 AM
+LUNI-151,Spike - Agree Implementation Approach for 1st Person Camera,Done,Complete,05/Jan/2017 5:34 PM,05/Apr/2017 1:21 PM,05/Apr/2017 1:21 PM
+LUNI-140,Add AI to Dragons,Done,Complete,04/Jan/2017 11:56 AM,06/Jan/2017 4:50 PM,06/Jan/2017 4:50 PM
+LUNI-137,UI - Complete User Testing for NPC Mailbox Use,Done,Delivered,04/Jan/2017 9:46 AM,16/Jan/2017 3:22 PM,16/Jan/2017 3:22 PM
+LUNI-136,Dragon fights - Dragonborn,Done,Complete,06/Dec/2016 5:32 PM,24/Jan/2017 10:00 AM,24/Jan/2017 10:00 AM
+LUNI-135,Dragon Fights - Irileth,Done,Done,07/Dec/2016 9:17 AM,24/Jan/2017 1:34 PM,24/Jan/2017 1:34 PM
+LUNI-134,Dragon Fights - Solstheim,Done,Done,07/Dec/2016 9:26 AM,25/Jan/2017 10:01 AM,25/Jan/2017 10:01 AM
+LUNI-130,Dragon Fights - Civilians run,Done,Done,24/Nov/2016 9:04 AM,16/Jan/2017 2:42 PM,16/Jan/2017 2:42 PM
+LUNI-107,Workshop Automated Test Approach for Mailbox Use,Done,Complete,07/Dec/2016 4:58 PM,03/Feb/2017 12:58 PM,03/Feb/2017 12:58 PM
+LUNI-105,Playtesting blog request,Done,Complete,30/Nov/2016 10:18 AM,09/Mar/2017 1:34 PM,09/Mar/2017 1:34 PM
+LUNI-85,Document and implement proposed development process,Done,Done,31/Oct/2016 11:53 AM,11/Jan/2017 4:09 PM,11/Jan/2017 4:09 PM
+LUNI-79,UI - Complete User Testing for Whiterun Delivery Address (Bannered Mare),Done,Delivered,03/Jan/2017 4:35 PM,16/Jan/2017 3:21 PM,16/Jan/2017 3:21 PM
+LUNI-78,UX - User Testing and Complete Design for quest-entry requests,Done,Complete,03/Jan/2017 4:34 PM,20/Jan/2017 4:45 PM,20/Jan/2017 4:45 PM
+LUNI-77,UI - User Testing and Complete Design for quest-entry requests,Done,Delivered,03/Jan/2017 4:31 PM,20/Jan/2017 11:18 AM,20/Jan/2017 11:18 AM
+LUNI-67,API - Dragon fight engagement (civilians),Done,Complete,09/Dec/2016 11:49 AM,30/Jan/2017 3:57 PM,30/Jan/2017 3:57 PM
+LUNI-19,Dragon fight end - Solstheim,Done,Complete,03/Jan/2017 11:34 AM,24/Jan/2017 1:43 PM,24/Jan/2017 1:43 PM
+LUNI-18,Dragon fight end - Dragonborn kill move,Done,Done,03/Jan/2017 11:33 AM,24/Jan/2017 1:35 PM,24/Jan/2017 1:35 PM
+LUNI-17,Dragon fight end - Irileth,Done,Complete,03/Jan/2017 11:33 AM,24/Jan/2017 10:00 AM,24/Jan/2017 10:00 AM
+LUNI-16,Dragon fight end - Civilian strike (only if all guards dead),Done,Complete,03/Jan/2017 11:33 AM,16/Jan/2017 2:39 PM,16/Jan/2017 2:39 PM
+LUNI-10,Game saved during mail transfer,Done,Complete,03/Jan/2017 11:33 AM,23/Jan/2017 10:37 AM,23/Jan/2017 10:37 AM
+LUNI-9,Mail transference,Done,Complete,03/Jan/2017 11:32 AM,31/Jan/2017 10:40 AM,31/Jan/2017 10:40 AM

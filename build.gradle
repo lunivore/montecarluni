@@ -9,6 +9,7 @@ buildscript {
     ext.openCsvVersion = '3.9'
     ext.kodeinVersion = '3.4.1'
     ext.stirryVersion = '0.0.1-20170509'
+    ext.cucumberVersion = '1.2.5'
 
     repositories {
         mavenCentral()
@@ -66,18 +67,21 @@ dependencies {
     compile "com.opencsv:opencsv:$openCsvVersion"
     compile "com.github.salomonbrys.kodein:kodein:$kodeinVersion"
 
-    testCompile("junit:junit:${junitVersion}")
-    testCompile("org.mockito:mockito-all:${mockitoVersion}")
-    testRuntime("junit:junit:${junitVersion}")
+    testCompile "junit:junit:$junitVersion"
+    testCompile "org.mockito:mockito-all:$mockitoVersion"
+    testRuntime "junit:junit:$junitVersion"
 
-    scenariosCompile("junit:junit:${junitVersion}")
+    scenariosCompile "junit:junit:$junitVersion"
     scenariosCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     scenariosCompile "com.opencsv:opencsv:$openCsvVersion"
     scenariosCompile "com.github.salomonbrys.kodein:kodein:$kodeinVersion"
-    scenariosCompile ("com.lunivore.stirry:stirry:$stirryVersion")
+    scenariosCompile "com.lunivore.stirry:stirry:$stirryVersion"
+    scenariosCompile "info.cukes:cucumber-junit:$cucumberVersion"
+    scenariosCompile "info.cukes:cucumber-java8:$cucumberVersion"
+    scenariosCompile "info.cukes:cucumber-picocontainer:$cucumberVersion"
 
-    scenariosRuntime("junit:junit:${junitVersion}")
-    scenariosRuntime("com.lunivore.stirry:stirry:$stirryVersion")
+    scenariosRuntime "junit:junit:$junitVersion"
+    scenariosRuntime "com.lunivore.stirry:stirry:$stirryVersion"
     scenariosRuntime "com.github.salomonbrys.kodein:kodein:$kodeinVersion"
 }
 

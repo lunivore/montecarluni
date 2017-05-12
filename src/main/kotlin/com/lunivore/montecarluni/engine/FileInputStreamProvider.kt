@@ -7,12 +7,7 @@ class FileInputStreamProvider : IProvideInputStreams {
 
     override fun fetch(filename: String): InputStream {
         var candidate = trimQuotes(filename)
-        val stream = FileInputStream(candidate)
-
-        if (stream == null) {
-            throw Exception("Could not load file at ${filename}")
-        }
-        return stream
+        return FileInputStream(candidate)
     }
 
     private fun trimQuotes(filename: String): String {

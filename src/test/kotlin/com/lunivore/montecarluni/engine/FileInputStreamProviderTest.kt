@@ -2,9 +2,6 @@ package com.lunivore.montecarluni.engine
 
 import junit.framework.Assert.assertTrue
 import org.junit.Test
-import kotlin.text.Charsets
-import java.io.InputStreamReader
-import java.io.StringReader
 
 
 class FileInputStreamProviderTest() {
