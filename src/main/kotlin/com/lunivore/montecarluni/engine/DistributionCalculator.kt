@@ -32,12 +32,13 @@ class DistributionCalculator : ICalculateWeeklyDistribution {
         var processedDate = dateRange.second
 
         while (processedDate != null &&
-                processedDate.compareTo(dateRange.first) > 0) {
+                processedDate.compareTo(dateRange.first) >= 0) {
 
             var nextDate = processedDate.minusDays(7)
             dateBrackets.add(Pair(nextDate, processedDate))
             processedDate = nextDate
         }
+        dateBrackets.reverse()
         return dateBrackets
     }
 
