@@ -12,10 +12,20 @@ class FileImportSteps(val world: World) : En {
         })
 
         When("^I import it into Montecarluni$", {
-            val file = this.javaClass.getResource(world.desiredFilename)
-            Stirry.setText({it is TextField }, file.toURI().path)
-            Stirry.buttonClick { it.text == "Import" }
+            importFile()
+
         })
+
+        Given("^\"([^\"]*)\" is imported$", {filename : String ->
+            world.desiredFilename = filename
+            importFile()
+        })
+    }
+
+    private fun importFile() {
+        val file = this.javaClass.getResource(world.desiredFilename)
+        Stirry.setText({ it is TextField }, file.toURI().path)
+        Stirry.buttonClick { it.text == "Import" }
     }
 }
 

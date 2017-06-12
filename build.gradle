@@ -8,7 +8,7 @@ buildscript {
     ext.testFxVersion = '4.0.6-alpha'
     ext.openCsvVersion = '3.9'
     ext.kodeinVersion = '3.4.1'
-    ext.stirryVersion = '0.0.1-20170509'
+    ext.stirryVersion = '0.0.2-20170609'
     ext.cucumberVersion = '1.2.5'
 
     repositories {

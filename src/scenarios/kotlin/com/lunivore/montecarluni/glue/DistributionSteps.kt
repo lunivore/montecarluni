@@ -16,9 +16,6 @@ class DistributionSteps(world: World) : En {
             val distributionControl = Stirry.find<Label> {it.id == "distributionOutput"}
             val distributions = distributionControl?.text
 
-            // Copying it to the world so we can talk about "it"
-            world.expectedDistribution = expectedDistribution
-
             assertEquals(expectedDistribution, distributions)
         });
     }

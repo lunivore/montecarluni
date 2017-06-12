@@ -1,6 +1,5 @@
 package com.lunivore.montecarluni.glue
 
-import com.lunivore.stirry.Stirry
 import cucumber.api.java8.En
 import javafx.application.Platform
 import javafx.scene.input.Clipboard
@@ -16,7 +15,7 @@ class ClipboardSteps(val world : World) : En {
 //            Stirry.buttonClick { it.text == "Copy to Clipboard" }
 //        })
 
-        Then("^I should be able to paste it somewhere else$", {
+        Then("^pasting it elsewhere should result in$", {expectedDistributionAsOneLine : String ->
             var text = ""
             var queue = ArrayBlockingQueue<Boolean>(1)
             Platform.runLater {
@@ -25,7 +24,10 @@ class ClipboardSteps(val world : World) : En {
             }
             queue.poll(1L, TimeUnit.SECONDS)
 
-            Assert.assertEquals(world.expectedDistribution, text)
+            val expectedDistribution = expectedDistributionAsOneLine.split(',')
+                    .map { it.trim()}
+                    .joinToString(separator = "\n")
+            Assert.assertEquals(expectedDistribution, text)
         });
     }
 }
