@@ -1,15 +1,34 @@
 package com.lunivore.montecarluni.engine
 
+import com.lunivore.montecarluni.Events
+import com.lunivore.montecarluni.model.UserNotification
 import com.lunivore.montecarluni.model.Record
+import com.lunivore.montecarluni.model.WeeklyDistribution
 import java.time.LocalDateTime
+import org.apache.logging.log4j.LogManager
 
-class DistributionCalculator : ICalculateWeeklyDistribution {
+class DistributionCalculator(val events: Events) {
+
+    companion object {
+        val logger = LogManager.getLogger()!!
+    }
+
+    init {
+        events.recordsParsedNotification.subscribe {
+            if (!it.any { it.getResolvedOrLastUpdatedDate() == null }) {
+                events.weeklyDistributionChangeNotification.push(WeeklyDistribution(calculateDistribution(it)))
+            } else {
+                logger.debug("Distribution had a problem:\n{}", it.map { "res: " + it.resolvedDate + " upd: " + it.lastUpdatedDate })
+                events.messageNotification.push(UserNotification("Some of the records had neither a resolved nor an updated date"))
+            }
+        }
+    }
+
     val neverUsed = LocalDateTime.of(1970, 1, 1, 0, 0)
 
-    override fun calculateDistribution(completedDates: List<Record>): List<Int> {
-        checkAllDatesValid(completedDates)
-        val dateRange = findFirstAndLastCompletedDates(completedDates)
+    private fun calculateDistribution(completedDates: List<Record>): List<Int> {
 
+        val dateRange = findFirstAndLastCompletedDates(completedDates)
         val dateBrackets = calculateDateBrackets(dateRange)
 
         return dateBrackets.map {
@@ -17,13 +36,14 @@ class DistributionCalculator : ICalculateWeeklyDistribution {
             completedDates.count {
                 val date = it.getResolvedOrLastUpdatedDate()
                 date != null &&
-                with(date) {
-                    (isAfter(bracket.first) &&
-                    isBefore(bracket.second)) ||
-                    isEqual(bracket.second)
-                }
+                        with(date) {
+                            (isAfter(bracket.first) &&
+                                    isBefore(bracket.second)) ||
+                                    isEqual(bracket.second)
+                        }
             }
         }
+
     }
 
     private fun calculateDateBrackets(dateRange : Pair<LocalDateTime, LocalDateTime>):
@@ -54,12 +74,6 @@ class DistributionCalculator : ICalculateWeeklyDistribution {
         return Pair(earliestCompletedDate, lastCompletedDate)
     }
 
-    private fun checkAllDatesValid(completedDates: List<Record>) {
-        if (completedDates.any {
-            it.getResolvedOrLastUpdatedDate() == null
-        }) {
-            throw IllegalArgumentException("Montecarluni does not support tickets with no resolved or last updated date.")
-        }
-    }
+
 }
 

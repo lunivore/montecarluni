@@ -1,7 +1,9 @@
 package com.lunivore.montecarluni.engine
 
+import com.lunivore.montecarluni.Events
 import com.lunivore.montecarluni.model.Record
 import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Test
 import java.io.ByteArrayInputStream
 import java.io.InputStream
@@ -9,10 +11,21 @@ import java.time.LocalDateTime
 
 class MultiFormatDateRecordCreatorTest {
 
+    private lateinit var events : Events
+    private lateinit var parser : MultiFormatDateRecordCreator
+
+    @Before
+    fun createParser() {
+        events = Events()
+        parser = MultiFormatDateRecordCreator(events)
+    }
+
     @Test
     fun shouldFindTheDetailsOfWhenStoriesWereResolved() {
-        // Given a CSV parser
-        val parser = MultiFormatDateRecordCreator()
+
+        // Given a CSV parser to which we're subscribed
+        var results = listOf<Record>()
+        events.recordsParsedNotification.subscribe { results = it}
 
         // When we pass it an input stream with some dates under "Resolved"
         val input = """Name,Created,Updated,Resolved,By
@@ -21,7 +34,8 @@ class MultiFormatDateRecordCreatorTest {
                 story,ignored date,,29/Dec/16 12:20 PM,whoever
                 """.trimIndent()
         val inputStream = ByteArrayInputStream(input.toByteArray())
-        val results = parser.parseResolvedDates(inputStream)
+
+        events.inputLoadedNotification.push(inputStream)
 
         // Then it should parse out those dates
         val expectedResults = listOf<LocalDateTime>(
@@ -35,8 +49,9 @@ class MultiFormatDateRecordCreatorTest {
 
     @Test
     fun shouldHandleMultipleDifferentDateTimeFormats() {
-        // Given a CSV parser
-        val parser = MultiFormatDateRecordCreator()
+        // Given a CSV parser to which we're subscribed
+        var results = mutableListOf<List<Record>>()
+        events.recordsParsedNotification.subscribe { results.add(it)}
 
         // When we pass it input streams with very different date formats
         val inputStreams = listOf<InputStream>(
@@ -44,8 +59,7 @@ class MultiFormatDateRecordCreatorTest {
                 createCsvInputStreamWithResolvedDate("01 Jan 2017 01:27 PM"),
                 createCsvInputStreamWithResolvedDate("8/9/2016 8:15 AM")                    )
 
-
-        val results = inputStreams.map {parser.parseResolvedDates(it)}
+        inputStreams.forEach {events.inputLoadedNotification.push(it)}
 
         // Then it should be able to resolve those dates.
         val expectedResults = listOf(
@@ -58,8 +72,9 @@ class MultiFormatDateRecordCreatorTest {
 
     @Test
     fun shouldHandleDateFormatsWhereTheFormatIsNotObviousFromFirstDate() {
-        // Given a CSV parser
-        val parser = MultiFormatDateRecordCreator()
+        // Given a CSV parser to which we're subscribed
+        var results = listOf<Record>()
+        events.recordsParsedNotification.subscribe { results = it }
 
         // When we pass it an input stream with ambiguous formats
         // - completely ambiguous
@@ -74,7 +89,7 @@ class MultiFormatDateRecordCreatorTest {
                 """.trimIndent()
 
         val inputStream = ByteArrayInputStream(input.toByteArray())
-        val results = parser.parseResolvedDates(inputStream)
+        events.inputLoadedNotification.push(inputStream)
 
         // Then it should still work them out from the rest of the dates
         val expectedResults = listOf<LocalDateTime>(
@@ -88,6 +103,10 @@ class MultiFormatDateRecordCreatorTest {
 
     @Test
     fun shouldIncludeLastUpdatedDatesInCaseResolvedDatesEmpty() {
+        // Given a CSV parser to which we're subscribed
+        var results = listOf<Record>()
+        events.recordsParsedNotification.subscribe { results = it }
+
         // Given a CSV with some resolved dates empty but updated dates existing
         val input = """Name,Created,Updated,Resolved,By
                 story,ignored date,21/May/17 10:01 AM,, whoever
@@ -96,9 +115,10 @@ class MultiFormatDateRecordCreatorTest {
                 story,ignored date,12/January/17 11:00 AM,,whoever
                 """.trimIndent()
 
+        val inputStream = ByteArrayInputStream(input.toByteArray())
+
         // When we parse that input
-        val parser = MultiFormatDateRecordCreator()
-        val results = parser.parseResolvedDates(ByteArrayInputStream(input.toByteArray()))
+        events.inputLoadedNotification.push(inputStream)
 
         // Then the records should include the updated dates as well as the created ones
         val expectedResults = listOf<Record>(

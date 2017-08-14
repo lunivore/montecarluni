@@ -1,8 +1,7 @@
 package com.lunivore.montecarluni.app
 
-import com.github.salomonbrys.kodein.Kodein
-import com.github.salomonbrys.kodein.instance
-import com.lunivore.montecarluni.engine.MontecarluniController
+import com.lunivore.montecarluni.Events
+import org.reactfx.EventStreams
 import javafx.application.Application
 import javafx.application.Platform
 import javafx.beans.property.StringProperty
@@ -17,34 +16,31 @@ import javafx.scene.input.Clipboard
 import javafx.scene.input.ClipboardContent
 import javafx.stage.Stage
 
+class MontecarluniApp(var events: Events) : Application() {
 
-class MontecarluniApp(var kodein: Kodein) : Application() {
-
-    val lineSeparatorForExcel = "\n"
+    val errorHandler = ErrorHandler()
 
     override fun start(primaryStage: Stage) {
-        val controller : MontecarluniController = kodein.instance()
-
         val root = FXMLLoader.load<Parent>(javaClass.classLoader.getResource(
                 "com/lunivore/montecarluni/app/montecarluni_app.fxml"))
 
         val importButton = (root.lookup("#importButton") as Button)
-        importButton.addEventHandler(
-            ActionEvent.ACTION, { controller.requestImport() })
-
         val filenameInput = (root.lookup("#filenameInput") as TextField)
-        filenameInput.textProperty().addListener(
-                { s, t, u -> controller.filenameChanged(filenameInput.text)})
+        EventStreams.eventsOf(importButton, ActionEvent.ACTION).subscribe({
+            events.fileImportRequest.push(filenameInput.text)
+        }, { errorHandler.handleError(it) })
+
+        val clipboardButton = root.lookup("#clipboardButton") as Button
+        EventStreams.eventsOf(clipboardButton, ActionEvent.ACTION).subscribe({
+            events.clipboardCopyRequest.push(null)
+        }, { errorHandler.handleError(it) })
 
         val distributionOutput = root.lookup("#distributionOutput") as Label
-        val clipboardButton = root.lookup("#clipboardButton") as Button
-        clipboardButton.addEventHandler(
-                ActionEvent.ACTION, { requestClipboard(distributionOutput.textProperty()) })
+        events.weeklyDistributionChangeNotification.subscribe({
+            Platform.runLater {distributionOutput.textProperty().set(it.asText())}
+        }, { errorHandler.handleError(it) })
 
-        controller.setDistributionHandler({ ints ->
-            val formatted = ints.joinToString(lineSeparatorForExcel)
-            Platform.runLater {distributionOutput.textProperty().set(formatted)}
-        })
+        events.messageNotification.subscribe { errorHandler.handleNotification(it) }
 
         primaryStage.scene = Scene(root)
         primaryStage.show()

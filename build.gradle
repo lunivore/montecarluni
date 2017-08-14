@@ -4,12 +4,14 @@ version '0.0.3-20170516'
 buildscript {
     ext.kotlinVersion = '1.1.1'
     ext.junitVersion  = '4.12'
+    ext.log4jVersion = '2.8.2'
     ext.mockitoVersion = '1.10.19'
-    ext.testFxVersion = '4.0.6-alpha'
+    ext.reactFxVersion = '1.4.1'
     ext.openCsvVersion = '3.9'
-    ext.kodeinVersion = '3.4.1'
-    ext.stirryVersion = '0.0.2-20170609'
-    ext.cucumberVersion = '1.2.5'
+    ext.stirryVersion = '0.2.0-20170814'
+    ext.cucumberJava8Version = '2.0.0-SNAPSHOT'
+    ext.cucumberPicocontainerVersion = '2.0.0-SNAPSHOT'
+    ext.cucumberJUnitVersion = '2.0.0-SNAPSHOT'
 
     repositories {
         mavenCentral()
@@ -26,6 +28,9 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots"
+    }
     flatDir {
         dirs 'libs'
     }
@@ -65,7 +70,9 @@ scenariosClasses.dependsOn("copyStirry")
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     compile "com.opencsv:opencsv:$openCsvVersion"
-    compile "com.github.salomonbrys.kodein:kodein:$kodeinVersion"
+    compile "org.reactfx:reactfx:$reactFxVersion"
+    compile "org.apache.logging.log4j:log4j-api:$log4jVersion"
+    compile "org.apache.logging.log4j:log4j-core:$log4jVersion"
 
     testCompile "junit:junit:$junitVersion"
     testCompile "org.mockito:mockito-all:$mockitoVersion"
@@ -74,15 +81,16 @@ dependencies {
     scenariosCompile "junit:junit:$junitVersion"
     scenariosCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     scenariosCompile "com.opencsv:opencsv:$openCsvVersion"
-    scenariosCompile "com.github.salomonbrys.kodein:kodein:$kodeinVersion"
+    scenariosCompile "org.reactfx:reactfx:$reactFxVersion"
     scenariosCompile "com.lunivore.stirry:stirry:$stirryVersion"
-    scenariosCompile "info.cukes:cucumber-junit:$cucumberVersion"
-    scenariosCompile "info.cukes:cucumber-java8:$cucumberVersion"
-    scenariosCompile "info.cukes:cucumber-picocontainer:$cucumberVersion"
+    scenariosCompile "io.cucumber:cucumber-junit:$cucumberJUnitVersion"
+    scenariosCompile "io.cucumber:cucumber-java8:$cucumberJava8Version"
+    scenariosCompile "io.cucumber:cucumber-picocontainer:$cucumberPicocontainerVersion"
+    scenariosCompile "org.apache.logging.log4j:log4j-api:$log4jVersion"
+    scenariosCompile "org.apache.logging.log4j:log4j-core:$log4jVersion"
 
     scenariosRuntime "junit:junit:$junitVersion"
     scenariosRuntime "com.lunivore.stirry:stirry:$stirryVersion"
-    scenariosRuntime "com.github.salomonbrys.kodein:kodein:$kodeinVersion"
 }
 
 jar {

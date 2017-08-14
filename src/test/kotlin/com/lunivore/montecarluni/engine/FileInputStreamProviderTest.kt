@@ -1,7 +1,11 @@
 package com.lunivore.montecarluni.engine
 
+import com.lunivore.montecarluni.Events
+import com.lunivore.montecarluni.model.UserNotification
+import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertTrue
 import org.junit.Test
+import java.io.InputStream
 
 
 class FileInputStreamProviderTest() {
@@ -11,12 +15,20 @@ class FileInputStreamProviderTest() {
         // Given a file that we know exists
         var license = "LICENSE.txt"
 
-        // When we load it
-        var stream = FileInputStreamProvider().fetch(license)
+        // And an input stream provider that we're listening to
+        val events = Events()
+        val provider = FileInputStreamProvider(events)
+        var results : InputStream? = null
+        events.inputLoadedNotification.subscribe {
+            results = it
+        }
+
+        // When we load the file
+        events.fileImportRequest.push(license)
 
         // Then it should be converted to an input stream
-        var result = stream.bufferedReader().use { it.readText() }
-        assertTrue(result.contains("Apache License"))
+        val result = results?.bufferedReader().use { it?.readText() }
+        assertTrue(result != null && result.contains("Apache License"))
     }
 
     @Test
@@ -24,11 +36,41 @@ class FileInputStreamProviderTest() {
         // Given a file that we know exists, with quotes
         var license = "\"LICENSE.txt\""
 
-        // When we load it
-        var stream = FileInputStreamProvider().fetch(license)
+        // And an input stream provider that we're listening to
+        val events = Events()
+        val provider = FileInputStreamProvider(events)
+        var results : InputStream? = null
+        events.inputLoadedNotification.subscribe {
+            results = it
+        }
+
+        // When we load the file
+        events.fileImportRequest.push(license)
+
 
         // Then it should be converted to an input stream anyway
-        var result = stream.bufferedReader().use { it.readText() }
-        assertTrue(result.contains("Apache License"))
+        val result = results?.bufferedReader().use { it?.readText() }
+        assertTrue(result != null && result.contains("Apache License"))
+    }
+
+    @Test
+    fun shouldTellUsIfTheFileDoesntExist() {
+        // Given a file that doesn't exist
+        var notThereFile = "IDontExist.txt"
+
+        // And an input stream provider that we're listening to
+        // And an input stream provider that we're listening to
+        val events = Events()
+        val provider = FileInputStreamProvider(events)
+        var results : UserNotification? = null
+        events.messageNotification.subscribe {
+            results = it
+        }
+
+        // When we try to load the file
+        events.fileImportRequest.push(notThereFile)
+
+        // Then we should be notified that it's not there
+        assertEquals("The file \"IDontExist.txt\" could not be found", results?.message)
     }
 }

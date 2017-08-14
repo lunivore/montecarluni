@@ -1,5 +1,6 @@
 package com.lunivore.montecarluni.engine
 
+import com.lunivore.montecarluni.Events
 import com.lunivore.montecarluni.model.Record
 import com.opencsv.CSVReader
 import java.io.InputStream
@@ -7,23 +8,29 @@ import java.io.InputStreamReader
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class MultiFormatDateRecordCreator : ICreateRecordsFromCvs {
+/**
+ * This will parse any date in UK or standard format, providing that a date with the year first also has
+ * 2-digit month and day (it is assumed that sensible people continue to be consistently sensible).
+ *
+ * Delimiters will also be parsed, so anything sensible is fine.
+ *
+ * Months are supported with both 3-letter and full word versions.
+ *
+ * Formats with the month at the start do not make sense and will not be supported.
+ */
+class MultiFormatDateRecordCreator(events: Events) {
 
     private val alreadyCheckedExceptionMsg = "This should never happen but checking it keeps Kotlin happy."
 
-    /**
-     * This will parse any date in UK or standard format, providing that a date with the year first also has
-     * 2-digit month and day (it is assumed that sensible people continue to be consistently sensible).
-     *
-     * Delimiters will also be parsed, so anything sensible is fine.
-     *
-     * Months are supported with both 3-letter and full word versions.
-     *
-     * Formats with the month at the start do not make sense and will not be supported.
-     */
-    override fun parseResolvedDates(stream: InputStream): List<Record> {
+    init {
+        events.inputLoadedNotification.subscribe {
+            events.recordsParsedNotification.push(parseResolvedDates(it))
+        }
+    }
+
+    private fun parseResolvedDates(stream: InputStream): List<Record> {
         val csv = CSVReader(InputStreamReader(stream))
-        var lines = csv.readAll()
+        val lines = csv.readAll()
         if (lines.size < 2) { throw IllegalArgumentException("Csv file requires a header row and at least one row of data.") }
 
         val resolvedIndex = lines[0].indexOfFirst { it == "Resolved" }
