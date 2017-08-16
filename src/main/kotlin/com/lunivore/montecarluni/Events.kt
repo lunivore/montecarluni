@@ -1,12 +1,16 @@
 package com.lunivore.montecarluni
 
-import com.lunivore.montecarluni.model.UserNotification
 import com.lunivore.montecarluni.model.Record
+import com.lunivore.montecarluni.model.UserNotification
 import com.lunivore.montecarluni.model.WeeklyDistribution
+import org.apache.logging.log4j.LogManager
 import org.reactfx.EventSource
 import java.io.InputStream
 
 class Events {
+
+    val logger = LogManager.getLogger()
+
     var fileImportRequest = EventSource<String>()
     val clipboardCopyRequest = EventSource<Unit>()
     val weeklyDistributionChangeNotification = EventSource<WeeklyDistribution>()
@@ -22,5 +26,13 @@ class Events {
             recordsParsedNotification,
             messageNotification)
 
+    init {
+        fileImportRequest.subscribe { logger.debug("File import requested: $it") }
+        clipboardCopyRequest.subscribe { logger.debug("Clipboard copy requested") }
+        weeklyDistributionChangeNotification.subscribe { logger.debug("Weekly distribution changed") }
+        inputLoadedNotification.subscribe { logger.debug("Input loaded") }
+        recordsParsedNotification.subscribe { logger.debug("Records parsed") }
+        messageNotification.subscribe { logger.debug("Message created: ${it.message}") }
+    }
 }
 

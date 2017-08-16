@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.MapValueFactory?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
 <GridPane xmlns:fx="http://javafx.com/fxml"
@@ -21,12 +22,19 @@
     <Button fx:id="importButton" text="Import"
                GridPane.columnIndex="2" GridPane.rowIndex="1"/>
 
-    <Label fx:id="distributionOutput"
+    <TableView fx:id="distributionOutput"
            GridPane.columnIndex="0" GridPane.rowIndex="2"
-           GridPane.columnSpan="3"
-           minWidth="300"
-           minHeight="400"
-    />
+           GridPane.columnSpan="3" prefHeight="400">
+        <columns>
+            <TableColumn text="Date Range" id="dateRangeColumn" prefWidth="400">
+            </TableColumn>
+            <TableColumn text="# Stories" id="numberOfStoriesColumn" prefWidth="100">
+                <cellValueFactory>
+                    <MapValueFactory key="numberOfStories"/>
+                </cellValueFactory>
+            </TableColumn>
+        </columns>
+    </TableView>
 
     <Button fx:id="clipboardButton" text="Copy to Clipboard"
             GridPane.columnIndex="0" GridPane.rowIndex="3" />

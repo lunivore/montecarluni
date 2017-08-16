@@ -1,11 +1,11 @@
 package com.lunivore.montecarluni.engine
 
 import com.lunivore.montecarluni.Events
-import com.lunivore.montecarluni.model.UserNotification
 import com.lunivore.montecarluni.model.Record
+import com.lunivore.montecarluni.model.UserNotification
 import com.lunivore.montecarluni.model.WeeklyDistribution
-import java.time.LocalDateTime
 import org.apache.logging.log4j.LogManager
+import java.time.LocalDateTime
 
 class DistributionCalculator(val events: Events) {
 

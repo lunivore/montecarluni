@@ -1,10 +1,10 @@
 package com.lunivore.montecarluni.engine
 
 import com.lunivore.montecarluni.Events
-import com.lunivore.montecarluni.model.UserNotification
 import com.lunivore.montecarluni.model.Record
+import com.lunivore.montecarluni.model.UserNotification
 import com.lunivore.montecarluni.model.WeeklyDistribution
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import java.time.LocalDateTime

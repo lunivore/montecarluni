@@ -3,7 +3,6 @@ package com.lunivore.montecarluni.glue
 import com.lunivore.stirry.Stirry
 import com.lunivore.stirry.fireAndStir
 import cucumber.api.java8.En
-import javafx.scene.control.Alert
 import javafx.scene.control.Button
 import javafx.scene.control.DialogPane
 import org.junit.Assert.assertTrue

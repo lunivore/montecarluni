@@ -1,6 +1,5 @@
 package com.lunivore.montecarluni.app
 
-import com.lunivore.montecarluni.Events
 import com.lunivore.montecarluni.model.UserNotification
 import javafx.scene.control.Alert
 import javafx.scene.control.Alert.AlertType.ERROR
