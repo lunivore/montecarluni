@@ -1,9 +1,7 @@
 package com.lunivore.montecarluni.engine
 
 import com.lunivore.montecarluni.Events
-import com.lunivore.montecarluni.model.Record
-import com.lunivore.montecarluni.model.UserNotification
-import com.lunivore.montecarluni.model.WeeklyDistribution
+import com.lunivore.montecarluni.model.*
 import org.apache.logging.log4j.LogManager
 import java.time.LocalDateTime
 
@@ -26,13 +24,14 @@ class DistributionCalculator(val events: Events) {
 
     val neverUsed = LocalDateTime.of(1970, 1, 1, 0, 0)
 
-    private fun calculateDistribution(completedDates: List<Record>): List<Int> {
+    private fun calculateDistribution(completedDates: List<Record>): List<StoriesClosedInWeek> {
 
         val dateRange = findFirstAndLastCompletedDates(completedDates)
         val dateBrackets = calculateDateBrackets(dateRange)
 
         return dateBrackets.map {
             bracket ->
+            StoriesClosedInWeek(DateRange(bracket.first.toLocalDate(), bracket.second.toLocalDate().minusDays(1)),
             completedDates.count {
                 val date = it.getResolvedOrLastUpdatedDate()
                 date != null &&
@@ -41,9 +40,8 @@ class DistributionCalculator(val events: Events) {
                                     isBefore(bracket.second)) ||
                                     isEqual(bracket.second)
                         }
-            }
+            })
         }
-
     }
 
     private fun calculateDateBrackets(dateRange : Pair<LocalDateTime, LocalDateTime>):
@@ -64,8 +62,10 @@ class DistributionCalculator(val events: Events) {
 
     private fun findFirstAndLastCompletedDates(completedDates: List<Record>): Pair<LocalDateTime, LocalDateTime> {
 
-        val earliestCompletedDate = completedDates.minBy { it.getResolvedOrLastUpdatedDate() ?: neverUsed }?.getResolvedOrLastUpdatedDate()
-        val lastCompletedDate = completedDates.maxBy { it.getResolvedOrLastUpdatedDate() ?: neverUsed }?.getResolvedOrLastUpdatedDate()
+        val earliestCompletedDate = completedDates.minBy { it.getResolvedOrLastUpdatedDate() ?: neverUsed }
+            ?.getResolvedOrLastUpdatedDate()?.toLocalDate()?.atStartOfDay()
+        val lastCompletedDate = completedDates.maxBy { it.getResolvedOrLastUpdatedDate() ?: neverUsed }
+                ?.getResolvedOrLastUpdatedDate()?.plusDays(1)?.toLocalDate()?.atStartOfDay()
 
         if (earliestCompletedDate == null || lastCompletedDate == null) {
             throw Exception("Could not find records to parse for date brackets. (Montecarluni should checked for this already!)")

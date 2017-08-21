@@ -1,12 +1,11 @@
 package com.lunivore.montecarluni.engine
 
 import com.lunivore.montecarluni.Events
-import com.lunivore.montecarluni.model.Record
-import com.lunivore.montecarluni.model.UserNotification
-import com.lunivore.montecarluni.model.WeeklyDistribution
+import com.lunivore.montecarluni.model.*
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 class DistributionCalculatorTest {
@@ -23,7 +22,7 @@ class DistributionCalculatorTest {
     @Test
     fun shouldCountNumberOfTicketsResolvedInDifferentWeeks() {
         // Given a DistributionCalculator to which we're subscribed
-        var results = WeeklyDistribution(listOf<Int>())
+        var results = WeeklyDistribution(listOf<StoriesClosedInWeek>())
         events.weeklyDistributionChangeNotification.subscribe { results = it }
 
         // Given a set of records weeks apart
@@ -34,7 +33,10 @@ class DistributionCalculatorTest {
         events.recordsParsedNotification.push(records)
 
         // Then it should provide the distribution
-        val expectedDistribution = WeeklyDistribution(listOf(3, 1, 2, 1))
+        val dec31 = LocalDate.of(2016, 12, 31)
+        val expectedDistribution = WeeklyDistribution(listOf(Pair(-5L, 1L), Pair(2L, 8L), Pair(9L, 15L), Pair(16L, 22L))
+                .map { DateRange(dec31.plusDays(it.first), dec31.plusDays(it.second)) }
+                .zip(listOf(3, 1, 2, 1), {d, i -> StoriesClosedInWeek(d, i)}))
 
         assertEquals(expectedDistribution, results)
     }
@@ -42,7 +44,7 @@ class DistributionCalculatorTest {
     @Test
     fun shouldUseLastUpdatedDateIfResolvedDateBlank() {
         // Given a DistributionCalculator to which we're subscribed
-        var results = WeeklyDistribution(listOf<Int>())
+        var results = WeeklyDistribution(listOf<StoriesClosedInWeek>())
         events.weeklyDistributionChangeNotification.subscribe { results = it }
 
         val hasResolvedDates = listOf(1, 3, 3, 8, 10, 15, 17, 22)
@@ -53,8 +55,12 @@ class DistributionCalculatorTest {
 
         // When we run them through the distribution calculator
         events.recordsParsedNotification.push(records)
+
         // Then it should provide the distribution
-        val expectedDistribution = WeeklyDistribution(listOf(1, 5, 2, 3))
+        val dec31 = LocalDate.of(2016, 12, 31)
+        val expectedDistribution = WeeklyDistribution(listOf(Pair(-5L, 1L), Pair(2L, 8L), Pair(9L, 15L), Pair(16L, 22L))
+                .map { DateRange(dec31.plusDays(it.first), dec31.plusDays(it.second)) }
+                .zip(listOf(1, 5, 2, 3), {d, i -> StoriesClosedInWeek(d, i)}))
 
         assertEquals(expectedDistribution, results)
     }
@@ -77,3 +83,5 @@ class DistributionCalculatorTest {
         assertEquals(expectedProblem, problem)
     }
 }
+
+

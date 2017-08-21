@@ -27,6 +27,9 @@
            GridPane.columnSpan="3" prefHeight="400">
         <columns>
             <TableColumn text="Date Range" id="dateRangeColumn" prefWidth="400">
+                <cellValueFactory>
+                    <MapValueFactory key="dateRange"/>
+                </cellValueFactory>
             </TableColumn>
             <TableColumn text="# Stories" id="numberOfStoriesColumn" prefWidth="100">
                 <cellValueFactory>

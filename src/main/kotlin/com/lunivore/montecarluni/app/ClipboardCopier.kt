@@ -14,7 +14,7 @@ class ClipboardCopier(events: Events) {
 
         events.clipboardCopyRequest.subscribe {
             val content = ClipboardContent()
-            content.putString(lastDistribution?.asText())
+            content.putString(lastDistribution?.distributionAsString)
             Platform.runLater{Clipboard.getSystemClipboard().setContent(content)}
         }
     }

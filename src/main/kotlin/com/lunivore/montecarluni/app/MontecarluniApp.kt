@@ -1,9 +1,9 @@
 package com.lunivore.montecarluni.app
 
 import com.lunivore.montecarluni.Events
+import com.lunivore.montecarluni.model.WeeklyDistribution
 import javafx.application.Application
 import javafx.application.Platform
-import javafx.beans.property.ReadOnlyListWrapper
 import javafx.beans.property.StringProperty
 import javafx.collections.FXCollections
 import javafx.event.ActionEvent
@@ -39,18 +39,23 @@ class MontecarluniApp(var events: Events) : Application() {
             events.clipboardCopyRequest.push(null)
         }, { errorHandler.handleError(it) })
 
-        val distributionOutput = root.lookup("#distributionOutput") as TableView<Map<String, Int>>
-        events.weeklyDistributionChangeNotification.subscribe({
-            logger.debug("Weekly distribution change detected by app")
-            distributionOutput.items =
-                ReadOnlyListWrapper<Map<String, Int>>(FXCollections.observableList<Map<String, Int>>(
-                        it.countsByWeek.map {mapOf<String, Int>(Pair("numberOfStories", it)) }))
-        }, { errorHandler.handleError(it) })
+        val distributionOutput = root.lookup("#distributionOutput") as TableView<Map<String, String>>
+        events.weeklyDistributionChangeNotification.subscribe(updateDistributionOutput(distributionOutput),
+                { errorHandler.handleError(it) })
 
         events.messageNotification.subscribe { errorHandler.handleNotification(it) }
 
         primaryStage.scene = Scene(root)
         primaryStage.show()
+    }
+
+    private fun updateDistributionOutput(distributionOutput: TableView<Map<String, String>>): (WeeklyDistribution) -> Unit {
+        return {
+            logger.debug("Weekly distribution change detected by app")
+            distributionOutput.items = FXCollections.observableList(it.storiesClosed.map {
+                mapOf(Pair("dateRange", it.range.asString), Pair("numberOfStories", it.count.toString()))
+            })
+        }
     }
 
     private fun requestClipboard(text: StringProperty) {

@@ -15,7 +15,8 @@ class DistributionSteps(world: World) : Scenario(world) {
             val distributionControl = Stirry.findInRoot<TableView<Map<String, Int>>> {
                 it.id == "distributionOutput"
             }.value
-            val distributions = distributionControl.items.map { it["numberOfStories"].toString()}
+            val distributions = distributionControl.items.map {
+                it["dateRange"].toString() + " | " + it["numberOfStories"].toString()}
                     .joinToString(separator = "\n")
 
             assertEquals(expectedDistribution, distributions)
