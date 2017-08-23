@@ -1,28 +1,30 @@
-package com.lunivore.montecarluni.glue
+package com.lunivore.montecarluni.steps
 
-import com.lunivore.stirry.Stirry
+import com.lunivore.montecarluni.glue.Scenario
+import com.lunivore.montecarluni.glue.World
+import com.lunivore.stirry.Stirry.Companion.findInRoot
+import com.lunivore.stirry.Stirry.Companion.getClipboard
 import com.lunivore.stirry.fireAndStir
 import cucumber.api.java8.En
 import javafx.scene.control.Button
-import javafx.scene.input.DataFormat
-import org.junit.Assert
+import org.junit.Assert.assertEquals
 
-class ClipboardSteps(val world : World) : En {
+class ClipboardSteps(val world : World) : Scenario(world) {
 
     init {
         When("^I copy it to the clipboard$", {
-            Stirry.findInRoot<Button>{
+            findInRoot<Button> {
                 it.id == "clipboardButton"
             }.value.fireAndStir()
         })
 
         Then("^pasting it elsewhere should result in$", {expectedDistributionAsOneLine : String ->
-            val text = Stirry.getClipboard(DataFormat.PLAIN_TEXT)
+            val text = getClipboard(javafx.scene.input.DataFormat.PLAIN_TEXT)
 
             val expectedDistribution = expectedDistributionAsOneLine.split(',')
                     .map { it.trim()}
                     .joinToString(separator = "\n")
-            Assert.assertEquals(expectedDistribution, text)
+            assertEquals(expectedDistribution, text)
         });
     }
 }

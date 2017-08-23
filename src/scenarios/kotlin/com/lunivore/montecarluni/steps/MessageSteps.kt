@@ -1,6 +1,6 @@
-package com.lunivore.montecarluni.glue
+package com.lunivore.montecarluni.steps
 
-import com.lunivore.stirry.Stirry
+import com.lunivore.stirry.Stirry.Companion.findInModalDialog
 import com.lunivore.stirry.fireAndStir
 import cucumber.api.java8.En
 import javafx.scene.control.Button
@@ -11,12 +11,12 @@ class MessageSteps : En
 {
     init {
         Then("^I should see an error '(.*)'$", { message : String ->
-            val foundDialog = Stirry.findInModalDialog<DialogPane> ({
+            val foundDialog = findInModalDialog<DialogPane>({
                 it is DialogPane && it.contentText.contains(message)
             })
             assertTrue(foundDialog.succeeded)
 
-            Stirry.findInModalDialog<Button>{ it.text == "Close"  }.value.fireAndStir()
+            findInModalDialog<Button> { it.text == "Close" }.value.fireAndStir()
         })
     }
 }

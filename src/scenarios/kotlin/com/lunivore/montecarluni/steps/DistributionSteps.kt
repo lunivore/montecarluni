@@ -1,5 +1,7 @@
-package com.lunivore.montecarluni.glue
+package com.lunivore.montecarluni.steps
 
+import com.lunivore.montecarluni.glue.Scenario
+import com.lunivore.montecarluni.glue.World
 import com.lunivore.stirry.Stirry
 import javafx.scene.control.TableView
 import org.junit.Assert.assertEquals

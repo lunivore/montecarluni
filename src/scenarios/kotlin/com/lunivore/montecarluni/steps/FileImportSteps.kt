@@ -1,6 +1,8 @@
-package com.lunivore.montecarluni.glue
+package com.lunivore.montecarluni.steps
 
-import com.lunivore.stirry.Stirry
+import com.lunivore.montecarluni.glue.Scenario
+import com.lunivore.montecarluni.glue.World
+import com.lunivore.stirry.Stirry.Companion.findInRoot
 import com.lunivore.stirry.fireAndStir
 import com.lunivore.stirry.setTextAndStir
 import javafx.scene.control.Button
@@ -15,15 +17,15 @@ class FileImportSteps(val world: World) : Scenario(world) {
 
         When("^I import it into Montecarluni$", {
             val file = javaClass.getResource(world.desiredFilename)
-            Stirry.findInRoot<TextField>{ true }.value.setTextAndStir(file.toURI().path)
-            Stirry.findInRoot<Button> { it.text == "Import" }.value.fireAndStir()
+            findInRoot<TextField> { true }.value.setTextAndStir(file.toURI().path)
+            findInRoot<Button> { it.text == "Import" }.value.fireAndStir()
         })
 
         Given("^\"([^\"]*)\" is imported$", {filename : String ->
             world.desiredFilename = filename
             val file = javaClass.getResource(world.desiredFilename)
-            Stirry.findInRoot<TextField>{ it is TextField }.value.setTextAndStir(file.toURI().path)
-            Stirry.findInRoot<Button> {it.text == "Import" }.value.fireAndStir()
+            findInRoot<TextField> { it is TextField }.value.setTextAndStir(file.toURI().path)
+            findInRoot<Button> { it.text == "Import" }.value.fireAndStir()
         })
 
         Given("^a file that doesn't exist \"([^\"]*)\"$", {filename : String ->
@@ -31,8 +33,8 @@ class FileImportSteps(val world: World) : Scenario(world) {
         })
 
         When("^I try to import that file$", {
-            Stirry.findInRoot<TextField>{ true }.value.setTextAndStir(world.desiredFilename!!)
-            Stirry.findInRoot<Button> { it.text == "Import" }.value.fireAndStir()
+            findInRoot<TextField> { true }.value.setTextAndStir(world.desiredFilename!!)
+            findInRoot<Button> { it.text == "Import" }.value.fireAndStir()
         })
     }
 

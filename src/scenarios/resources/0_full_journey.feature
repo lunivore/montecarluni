@@ -2,7 +2,7 @@ Feature: Full Journey
 
 Scenario: Can load a typical JIRA csv and calculate the distribution from it
 
-Given a typical JIRA export "/closed_only_JIRA.csv"
+Given a typical JIRA export "/example_files/closed_only_JIRA.csv"
 When I import it into Montecarluni
 Then I should see the distribution
 """
@@ -23,7 +23,7 @@ from 2017-03-31 to 2017-04-06 | 6
 """
 
 Scenario: Can copy the distribution to the clipboard
-Given "/closed_only_JIRA.csv" is imported
+Given "/example_files/closed_only_JIRA.csv" is imported
 When I copy it to the clipboard
 Then pasting it elsewhere should result in
 """
