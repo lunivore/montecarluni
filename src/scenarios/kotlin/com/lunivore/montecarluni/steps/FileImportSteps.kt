@@ -17,14 +17,14 @@ class FileImportSteps(val world: World) : Scenario(world) {
 
         When("^I import it into Montecarluni$", {
             val file = javaClass.getResource(world.desiredFilename)
-            findInRoot<TextField> { true }.value.setTextAndStir(file.toURI().path)
+            findInRoot<TextField> { it.id == "filenameInput" }.value.setTextAndStir(file.toURI().path)
             findInRoot<Button> { it.text == "Import" }.value.fireAndStir()
         })
 
         Given("^\"([^\"]*)\" is imported$", {filename : String ->
             world.desiredFilename = filename
             val file = javaClass.getResource(world.desiredFilename)
-            findInRoot<TextField> { it is TextField }.value.setTextAndStir(file.toURI().path)
+            findInRoot<TextField> { it.id == "filenameInput" }.value.setTextAndStir(file.toURI().path)
             findInRoot<Button> { it.text == "Import" }.value.fireAndStir()
         })
 
@@ -33,7 +33,7 @@ class FileImportSteps(val world: World) : Scenario(world) {
         })
 
         When("^I try to import that file$", {
-            findInRoot<TextField> { true }.value.setTextAndStir(world.desiredFilename!!)
+            findInRoot<TextField> { it.id == "filenameInput" }.value.setTextAndStir(world.desiredFilename!!)
             findInRoot<Button> { it.text == "Import" }.value.fireAndStir()
         })
     }

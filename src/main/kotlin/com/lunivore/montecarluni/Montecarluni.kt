@@ -4,6 +4,7 @@ import com.lunivore.montecarluni.app.ClipboardCopier
 import com.lunivore.montecarluni.app.MontecarluniApp
 import com.lunivore.montecarluni.engine.DistributionCalculator
 import com.lunivore.montecarluni.engine.FileInputStreamProvider
+import com.lunivore.montecarluni.engine.Forecaster
 import com.lunivore.montecarluni.engine.MultiFormatDateRecordCreator
 import javafx.application.Application
 import javafx.stage.Stage
@@ -17,6 +18,7 @@ class Montecarluni : Application() {
         var distributionCalculator = DistributionCalculator(events)
         var recordCreator = MultiFormatDateRecordCreator(events)
         var clipboardCopier = ClipboardCopier(events)
+        var forecaster = Forecaster(events)
         MontecarluniApp(events).start(primaryStage)
         logger.debug("...Montecarluni started successfully.")
     }
@@ -29,3 +31,4 @@ class Montecarluni : Application() {
         }
     }
 }
+

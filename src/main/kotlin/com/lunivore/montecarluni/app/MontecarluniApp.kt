@@ -1,6 +1,7 @@
 package com.lunivore.montecarluni.app
 
 import com.lunivore.montecarluni.Events
+import com.lunivore.montecarluni.model.Forecast
 import com.lunivore.montecarluni.model.WeeklyDistribution
 import javafx.application.Application
 import javafx.application.Platform
@@ -18,11 +19,12 @@ import javafx.scene.input.ClipboardContent
 import javafx.stage.Stage
 import org.apache.logging.log4j.LogManager
 import org.reactfx.EventStreams
+import java.time.format.DateTimeFormatter
 
 class MontecarluniApp(var events: Events) : Application() {
     val logger = LogManager.getLogger()
-
     val errorHandler = ErrorHandler()
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
     override fun start(primaryStage: Stage) {
         val root = FXMLLoader.load<Parent>(javaClass.classLoader.getResource(
@@ -45,9 +47,28 @@ class MontecarluniApp(var events: Events) : Application() {
 
         events.messageNotification.subscribe { errorHandler.handleNotification(it) }
 
+        val numOfStories = root.lookup("#numStoriesForecastInput") as TextField
+        val forecastButton = root.lookup("#forecastButton") as Button
+        EventStreams.eventsOf(forecastButton, ActionEvent.ACTION).subscribe({
+            events.forecastRequest.push(numOfStories.textProperty().value.toInt())
+        })
+
+        val forecastOutput = root.lookup("#forecastOutput") as TableView<Map<String, String>>
+        events.forecastNotification.subscribe(updateForecastOutput(forecastOutput),
+                { errorHandler.handleError(it) })
+
         primaryStage.scene = Scene(root)
         primaryStage.title = "Montecarluni"
         primaryStage.show()
+    }
+
+    private fun  updateForecastOutput(forecastOutput: TableView<Map<String, String>>): ((Forecast) -> Unit)? {
+        return {
+            logger.debug("Forecast detected by app")
+            forecastOutput.items = FXCollections.observableList(it.dataPoints.map {
+                mapOf(Pair("probability", "${it.probability}%"), Pair("forecastDate", it.forecastDate.format(formatter)))
+            })
+        }
     }
 
     private fun updateDistributionOutput(distributionOutput: TableView<Map<String, String>>): (WeeklyDistribution) -> Unit {

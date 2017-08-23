@@ -2,11 +2,13 @@
 
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-
 <TabPane xmlns:fx="http://javafx.com/fxml/1">
     <tabs>
         <Tab text="Import file" closable="false" id="importTab">
             <fx:include source="import_tab.fxml"/>
+        </Tab>
+        <Tab text="Forecast" closable="false" id="forecastTab">
+            <fx:include source="forecast_tab.fxml"/>
         </Tab>
     </tabs>
 </TabPane>

@@ -1,0 +1,30 @@
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.MapValueFactory?>
+<?import javafx.scene.layout.*?>
+<GridPane xmlns:fx="http://javafx.com/fxml"
+          alignment="center" hgap="10" vgap="10">
+
+    <Label text="Number of stories left to complete:"
+           GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+    <TextField id="numStoriesForecastInput"
+               prefWidth="200"
+               GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+    <Button id="forecastButton" text="Run forecast" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+
+    <TableView fx:id="forecastOutput"
+               GridPane.columnIndex="0" GridPane.rowIndex="2"
+               GridPane.columnSpan="3" prefHeight="400">
+        <columns>
+            <TableColumn text="Probability" id="probability" prefWidth="100">
+                <cellValueFactory>
+                    <MapValueFactory key="probability"/>
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn text="Date" id="forecastDate" prefWidth="400">
+                <cellValueFactory>
+                    <MapValueFactory key="forecastDate"/>
+                </cellValueFactory>
+            </TableColumn>
+        </columns>
+    </TableView>
+</GridPane>

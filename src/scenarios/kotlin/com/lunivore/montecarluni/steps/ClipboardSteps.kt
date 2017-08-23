@@ -5,7 +5,6 @@ import com.lunivore.montecarluni.glue.World
 import com.lunivore.stirry.Stirry.Companion.findInRoot
 import com.lunivore.stirry.Stirry.Companion.getClipboard
 import com.lunivore.stirry.fireAndStir
-import cucumber.api.java8.En
 import javafx.scene.control.Button
 import org.junit.Assert.assertEquals
 

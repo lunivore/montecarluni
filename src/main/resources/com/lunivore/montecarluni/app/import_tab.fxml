@@ -1,21 +1,16 @@
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.cell.MapValueFactory?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.Label?>
-
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.MapValueFactory?>
+<?import javafx.scene.layout.*?>
 <GridPane xmlns:fx="http://javafx.com/fxml"
           alignment="center" hgap="10" vgap="10">
     <padding>
-        <Insets top="25" right="25" bottom="10" left="25"/>
+        <Insets top="25" right="25" bottom="25" left="25"/>
     </padding>
-    <Label text="Filename for Import:"
+    <Label text="Filename for Import:" prefWidth="120"
            GridPane.columnIndex="0" GridPane.rowIndex="1"/>
 
-    <TextField fx:id="filenameInput"
+    <TextField fx:id="filenameInput" prefWidth="200"
                GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
     <Button fx:id="importButton" text="Import"

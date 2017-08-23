@@ -1,5 +1,6 @@
 package com.lunivore.montecarluni
 
+import com.lunivore.montecarluni.model.Forecast
 import com.lunivore.montecarluni.model.Record
 import com.lunivore.montecarluni.model.UserNotification
 import com.lunivore.montecarluni.model.WeeklyDistribution
@@ -17,6 +18,8 @@ class Events {
     val inputLoadedNotification = EventSource<InputStream>()
     val recordsParsedNotification = EventSource<List<Record>>()
     val messageNotification = EventSource<UserNotification>()
+    val forecastRequest = EventSource<Int>()
+    val forecastNotification = EventSource<Forecast>()
 
     val  All = listOf(
             fileImportRequest,
@@ -33,6 +36,7 @@ class Events {
         inputLoadedNotification.subscribe { logger.debug("Input loaded") }
         recordsParsedNotification.subscribe { logger.debug("Records parsed") }
         messageNotification.subscribe { logger.debug("Message created: ${it.message}") }
+        forecastNotification.subscribe { logger.debug("Forecast created") }
     }
 }
 
