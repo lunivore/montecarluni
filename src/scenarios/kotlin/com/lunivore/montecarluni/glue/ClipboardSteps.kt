@@ -12,7 +12,7 @@ class ClipboardSteps(val world : World) : En {
     init {
         When("^I copy it to the clipboard$", {
             Stirry.findInRoot<Button>{
-                it.text == "Copy to Clipboard"
+                it.id == "clipboardButton"
             }.value.fireAndStir()
         })
 

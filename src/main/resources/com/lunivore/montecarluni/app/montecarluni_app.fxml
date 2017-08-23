@@ -1,45 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.control.cell.MapValueFactory?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Text?>
-<GridPane xmlns:fx="http://javafx.com/fxml"
-          alignment="center" hgap="10" vgap="10">
-    <padding><Insets top="25" right="25" bottom="10" left="25"/></padding>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 
-    <Text text="Montecarluni"
-          GridPane.columnIndex="0" GridPane.rowIndex="0"
-          GridPane.columnSpan="3"/>
-
-    <Label text="Filename for Import:"
-           GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-
-    <TextField fx:id="filenameInput"
-               GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-
-    <Button fx:id="importButton" text="Import"
-               GridPane.columnIndex="2" GridPane.rowIndex="1"/>
-
-    <TableView fx:id="distributionOutput"
-           GridPane.columnIndex="0" GridPane.rowIndex="2"
-           GridPane.columnSpan="3" prefHeight="400">
-        <columns>
-            <TableColumn text="Date Range" id="dateRangeColumn" prefWidth="400">
-                <cellValueFactory>
-                    <MapValueFactory key="dateRange"/>
-                </cellValueFactory>
-            </TableColumn>
-            <TableColumn text="# Stories" id="numberOfStoriesColumn" prefWidth="100">
-                <cellValueFactory>
-                    <MapValueFactory key="numberOfStories"/>
-                </cellValueFactory>
-            </TableColumn>
-        </columns>
-    </TableView>
-
-    <Button fx:id="clipboardButton" text="Copy to Clipboard"
-            GridPane.columnIndex="0" GridPane.rowIndex="3" />
-
-</GridPane>
+<TabPane xmlns:fx="http://javafx.com/fxml/1">
+    <tabs>
+        <Tab text="Import file" closable="false" id="importTab">
+            <fx:include source="import_tab.fxml"/>
+        </Tab>
+    </tabs>
+</TabPane>

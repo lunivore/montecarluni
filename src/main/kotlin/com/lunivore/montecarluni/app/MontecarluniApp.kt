@@ -46,6 +46,7 @@ class MontecarluniApp(var events: Events) : Application() {
         events.messageNotification.subscribe { errorHandler.handleNotification(it) }
 
         primaryStage.scene = Scene(root)
+        primaryStage.title = "Montecarluni"
         primaryStage.show()
     }
 
