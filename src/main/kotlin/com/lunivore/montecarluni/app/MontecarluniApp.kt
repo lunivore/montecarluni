@@ -2,6 +2,7 @@ package com.lunivore.montecarluni.app
 
 import com.lunivore.montecarluni.Events
 import com.lunivore.montecarluni.model.Forecast
+import com.lunivore.montecarluni.model.ForecastRequest
 import com.lunivore.montecarluni.model.WeeklyDistribution
 import javafx.application.Application
 import javafx.application.Platform
@@ -12,6 +13,7 @@ import javafx.fxml.FXMLLoader
 import javafx.scene.Parent
 import javafx.scene.Scene
 import javafx.scene.control.Button
+import javafx.scene.control.DatePicker
 import javafx.scene.control.TableView
 import javafx.scene.control.TextField
 import javafx.scene.input.Clipboard
@@ -48,9 +50,11 @@ class MontecarluniApp(var events: Events) : Application() {
         events.messageNotification.subscribe { errorHandler.handleNotification(it) }
 
         val numOfStories = root.lookup("#numStoriesForecastInput") as TextField
+        val startDate = root.lookup("#forecastStartDateInput") as DatePicker
         val forecastButton = root.lookup("#forecastButton") as Button
         EventStreams.eventsOf(forecastButton, ActionEvent.ACTION).subscribe({
-            events.forecastRequest.push(numOfStories.textProperty().value.toInt())
+            events.forecastRequest.push(
+                    ForecastRequest(numOfStories.textProperty().value.toInt(), startDate.value))
         })
 
         val forecastOutput = root.lookup("#forecastOutput") as TableView<Map<String, String>>

@@ -1,9 +1,6 @@
 package com.lunivore.montecarluni
 
-import com.lunivore.montecarluni.model.Forecast
-import com.lunivore.montecarluni.model.Record
-import com.lunivore.montecarluni.model.UserNotification
-import com.lunivore.montecarluni.model.WeeklyDistribution
+import com.lunivore.montecarluni.model.*
 import org.apache.logging.log4j.LogManager
 import org.reactfx.EventSource
 import java.io.InputStream
@@ -18,7 +15,7 @@ class Events {
     val inputLoadedNotification = EventSource<InputStream>()
     val recordsParsedNotification = EventSource<List<Record>>()
     val messageNotification = EventSource<UserNotification>()
-    val forecastRequest = EventSource<Int>()
+    val forecastRequest = EventSource<ForecastRequest>()
     val forecastNotification = EventSource<Forecast>()
 
     val  All = listOf(
