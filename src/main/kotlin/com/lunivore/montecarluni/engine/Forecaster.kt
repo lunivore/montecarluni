@@ -13,9 +13,11 @@ class Forecaster(events: Events) {
     private lateinit var  distribution: WeeklyDistribution
     private val random = Random(42)
     private val NUM_OF_CYCLES = 1000
+    private var  selectedIndices: List<Int>? = null
 
     init {
         events.weeklyDistributionChangeNotification.subscribe { distribution = it }
+        events.weeklyDistributionSelectionRequest.subscribe { selectedIndices = it }
         events.forecastRequest.subscribe {
             events.forecastNotification.push(generateForecast(it))
         }
@@ -33,11 +35,17 @@ class Forecaster(events: Events) {
     }
 
     private fun  getEndDate(request: ForecastRequest): LocalDate {
-        var date = request.startDate ?: distribution.storiesClosed.last().range.end
+        val selection = selectedIndices
+        val storiesToUse = if (selection == null) { distribution.storiesClosed }
+            else {distribution.storiesClosed.filterIndexed {
+              index, journey ->  selection.contains(index)
+            }}
+
+        var date = request.startDate ?: storiesToUse.last().range.end
 
         var done = 0
         while (done < request.numStories) {
-            done = done + distribution.storiesClosed[random.nextInt(distribution.storiesClosed.size)].count
+            done = done + storiesToUse[random.nextInt(storiesToUse.size)].count
             date = date.plusDays(7)
         }
         return date

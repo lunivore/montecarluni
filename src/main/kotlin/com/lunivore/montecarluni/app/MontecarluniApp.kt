@@ -7,15 +7,14 @@ import com.lunivore.montecarluni.model.WeeklyDistribution
 import javafx.application.Application
 import javafx.application.Platform
 import javafx.beans.property.StringProperty
+import javafx.beans.value.ChangeListener
 import javafx.collections.FXCollections
+import javafx.collections.ListChangeListener
 import javafx.event.ActionEvent
 import javafx.fxml.FXMLLoader
 import javafx.scene.Parent
 import javafx.scene.Scene
-import javafx.scene.control.Button
-import javafx.scene.control.DatePicker
-import javafx.scene.control.TableView
-import javafx.scene.control.TextField
+import javafx.scene.control.*
 import javafx.scene.input.Clipboard
 import javafx.scene.input.ClipboardContent
 import javafx.stage.Stage
@@ -32,23 +31,19 @@ class MontecarluniApp(var events: Events) : Application() {
         val root = FXMLLoader.load<Parent>(javaClass.classLoader.getResource(
                 "com/lunivore/montecarluni/app/montecarluni_app.fxml"))
 
-        val importButton = (root.lookup("#importButton") as Button)
-        val filenameInput = (root.lookup("#filenameInput") as TextField)
-        EventStreams.eventsOf(importButton, ActionEvent.ACTION).subscribe({
-            events.fileImportRequest.push(filenameInput.text)
-        }, { errorHandler.handleError(it) })
-
-        val clipboardButton = root.lookup("#clipboardButton") as Button
-        EventStreams.eventsOf(clipboardButton, ActionEvent.ACTION).subscribe({
-            events.clipboardCopyRequest.push(null)
-        }, { errorHandler.handleError(it) })
-
-        val distributionOutput = root.lookup("#distributionOutput") as TableView<Map<String, String>>
-        events.weeklyDistributionChangeNotification.subscribe(updateDistributionOutput(distributionOutput),
-                { errorHandler.handleError(it) })
+        initFileImporting(root)
+        initClipboardButton(root)
+        initWeeklyDistribution(root)
+        initForecasting(root)
 
         events.messageNotification.subscribe { errorHandler.handleNotification(it) }
 
+        primaryStage.scene = Scene(root)
+        primaryStage.title = "Montecarluni"
+        primaryStage.show()
+    }
+
+    private fun initForecasting(root: Parent) {
         val numOfStories = root.lookup("#numStoriesForecastInput") as TextField
         val startDate = root.lookup("#forecastStartDateInput") as DatePicker
         val forecastButton = root.lookup("#forecastButton") as Button
@@ -57,30 +52,61 @@ class MontecarluniApp(var events: Events) : Application() {
                     ForecastRequest(numOfStories.textProperty().value.toInt(), startDate.value))
         })
 
-        val forecastOutput = root.lookup("#forecastOutput") as TableView<Map<String, String>>
+        val forecastOutput = root.lookup("#forecastOutput") as TableView<DataPointPresenter>
         events.forecastNotification.subscribe(updateForecastOutput(forecastOutput),
                 { errorHandler.handleError(it) })
-
-        primaryStage.scene = Scene(root)
-        primaryStage.title = "Montecarluni"
-        primaryStage.show()
     }
 
-    private fun  updateForecastOutput(forecastOutput: TableView<Map<String, String>>): ((Forecast) -> Unit)? {
-        return {
-            logger.debug("Forecast detected by app")
-            forecastOutput.items = FXCollections.observableList(it.dataPoints.map {
-                mapOf(Pair("probability", "${it.probability}%"), Pair("forecastDate", it.forecastDate.format(formatter)))
-            })
+    private fun initWeeklyDistribution(root: Parent) {
+        val distributionOutput = root.lookup("#distributionOutput") as TableView<StoriesClosedInWeekPresenter>
+        distributionOutput.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+        events.weeklyDistributionChangeNotification.subscribe(updateDistributionOutput(distributionOutput),
+                { errorHandler.handleError(it) })
+
+        val useSelectionInput = root.lookup("#useSelectionInput") as CheckBox
+        useSelectionInput.selectedProperty().addListener(ChangeListener {s, t, u ->
+            pushSelectionRequest(useSelectionInput.isSelected, distributionOutput.selectionModel.selectedIndices)
+        })
+        distributionOutput.selectionModel.selectedCells.addListener(ListChangeListener {
+            pushSelectionRequest(useSelectionInput.isSelected, distributionOutput.selectionModel.selectedIndices)
+        })
+    }
+
+    private fun pushSelectionRequest(useSelectionInput: Boolean, selectedIndices: List<Int>) {
+        if (useSelectionInput) {
+            events.weeklyDistributionSelectionRequest.push(selectedIndices)
+        } else {
+            events.weeklyDistributionSelectionRequest.push(null)
         }
     }
 
-    private fun updateDistributionOutput(distributionOutput: TableView<Map<String, String>>): (WeeklyDistribution) -> Unit {
+    private fun initClipboardButton(root: Parent) {
+        val clipboardButton = root.lookup("#clipboardButton") as Button
+        EventStreams.eventsOf(clipboardButton, ActionEvent.ACTION).subscribe({
+            events.clipboardCopyRequest.push(null)
+        }, { errorHandler.handleError(it) })
+    }
+
+    private fun initFileImporting(root: Parent) {
+        val importButton = (root.lookup("#importButton") as Button)
+        val filenameInput = (root.lookup("#filenameInput") as TextField)
+        EventStreams.eventsOf(importButton, ActionEvent.ACTION).subscribe({
+            events.fileImportRequest.push(filenameInput.text)
+        }, { errorHandler.handleError(it) })
+    }
+
+    private fun  updateForecastOutput(forecastOutput: TableView<DataPointPresenter>): ((Forecast) -> Unit)? {
+        return {
+            logger.debug("Forecast detected by app")
+            forecastOutput.items = FXCollections.observableList(it.dataPoints.map { DataPointPresenter(it) })
+        }
+    }
+
+    private fun updateDistributionOutput(distributionOutput: TableView<StoriesClosedInWeekPresenter>): (WeeklyDistribution) -> Unit {
         return {
             logger.debug("Weekly distribution change detected by app")
-            distributionOutput.items = FXCollections.observableList(it.storiesClosed.map {
-                mapOf(Pair("dateRange", it.range.asString), Pair("numberOfStories", it.count.toString()))
-            })
+            distributionOutput.items = FXCollections.observableList(it.storiesClosed.map { StoriesClosedInWeekPresenter(it) })
         }
     }
 

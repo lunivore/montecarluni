@@ -8,7 +8,7 @@ buildscript {
     ext.mockitoVersion = '1.10.19'
     ext.reactFxVersion = '1.4.1'
     ext.openCsvVersion = '3.9'
-    ext.stirryVersion = '0.2.0-20170814'
+    ext.stirryVersion = '0.2.1-20170825'
     ext.cucumberJava8Version = '2.0.0-SNAPSHOT'
     ext.cucumberPicocontainerVersion = '2.0.0-SNAPSHOT'
     ext.cucumberJUnitVersion = '2.0.0-SNAPSHOT'

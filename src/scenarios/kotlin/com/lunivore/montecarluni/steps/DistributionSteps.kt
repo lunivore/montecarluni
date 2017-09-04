@@ -1,5 +1,6 @@
 package com.lunivore.montecarluni.steps
 
+import com.lunivore.montecarluni.app.StoriesClosedInWeekPresenter
 import com.lunivore.montecarluni.glue.Scenario
 import com.lunivore.montecarluni.glue.World
 import com.lunivore.stirry.Stirry
@@ -14,11 +15,12 @@ class DistributionSteps(world: World) : Scenario(world) {
                     .map { it.trim()}
                     .joinToString(separator = "\n")
 
-            val distributionControl = Stirry.findInRoot<TableView<Map<String, Int>>> {
+            val distributionControl = Stirry.findInRoot<TableView<StoriesClosedInWeekPresenter>> {
                 it.id == "distributionOutput"
             }.value
+
             val distributions = distributionControl.items.map {
-                it["dateRange"].toString() + " | " + it["numberOfStories"].toString()}
+                it.rangeAsString + " | " + it.count}
                     .joinToString(separator = "\n")
 
             assertEquals(expectedDistribution, distributions)

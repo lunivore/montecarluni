@@ -10,14 +10,19 @@ data class WeeklyDistribution(val storiesClosed : List<StoriesClosedInWeek>) {
         get(){
             return storiesClosed.map { it.count }.joinToString(separator = lineSeparatorForExcel)
         }
+
+    fun distributionAsString(selection : List<Int>) : String {
+        return storiesClosed.filterIndexed{index, content -> selection.contains(index)}
+                .map { it.count }.joinToString(separator = lineSeparatorForExcel)
+    }
 }
 
-data class StoriesClosedInWeek(val range : DateRange, val count : Int)
+data class StoriesClosedInWeek(val range : DateRange, val count : Int) {
+    fun  formatRange(formatter: DateTimeFormatter): Pair<String, String> {
+        return range.format(formatter)
+    }
+}
 
 data class DateRange(val start : LocalDate, val end : LocalDate) {
-    private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-    val asString: String
-        get() {
-            return "from ${start.format(formatter)} to ${end.format(formatter)}"
-        }
+    fun  format(formatter: DateTimeFormatter): Pair<String, String> { return Pair(formatter.format(start), formatter.format(end))}
 }

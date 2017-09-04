@@ -17,6 +17,7 @@ class Events {
     val messageNotification = EventSource<UserNotification>()
     val forecastRequest = EventSource<ForecastRequest>()
     val forecastNotification = EventSource<Forecast>()
+    val weeklyDistributionSelectionRequest = EventSource<List<Int>?>()
 
     val  All = listOf(
             fileImportRequest,
@@ -24,7 +25,10 @@ class Events {
             weeklyDistributionChangeNotification,
             inputLoadedNotification,
             recordsParsedNotification,
-            messageNotification)
+            messageNotification,
+            forecastRequest,
+            forecastNotification,
+            weeklyDistributionSelectionRequest)
 
     init {
         fileImportRequest.subscribe { logger.debug("File import requested: $it") }
@@ -34,6 +38,7 @@ class Events {
         recordsParsedNotification.subscribe { logger.debug("Records parsed") }
         messageNotification.subscribe { logger.debug("Message created: ${it.message}") }
         forecastNotification.subscribe { logger.debug("Forecast created") }
+        weeklyDistributionSelectionRequest.subscribe { logger.debug("Weekly distribution selected") }
     }
 }
 

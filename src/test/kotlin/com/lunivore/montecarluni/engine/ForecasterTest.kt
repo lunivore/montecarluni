@@ -30,31 +30,10 @@ class ForecasterTest {
         events.forecastRequest.push(ForecastRequest(32, null))
 
         // Then we should be provided with a really predictable result
-        val expectedForecast =
-            """
-            100% | 2017-04-23
-            95% | 2017-04-23
-            90% | 2017-04-23
-            85% | 2017-04-23
-            80% | 2017-04-23
-            75% | 2017-04-23
-            70% | 2017-04-23
-            65% | 2017-04-23
-            60% | 2017-04-23
-            55% | 2017-04-23
-            50% | 2017-04-23
-            45% | 2017-04-23
-            40% | 2017-04-23
-            35% | 2017-04-23
-            30% | 2017-04-23
-            25% | 2017-04-23
-            20% | 2017-04-23
-            15% | 2017-04-23
-            10% | 2017-04-23
-            5% | 2017-04-23
-            0% | 2017-04-22
-            """
-        assertEquals(expectedForecast.trimIndent(),
+        val expectedForecast =listOf(100, 95, 90, 85, 80, 75, 70, 65, 60, 55, 50, 45, 40, 35, 30, 25, 20, 15, 10, 5, 0)
+                .map {if (it == 0) "0% | 2017-04-22" else "$it% | 2017-04-23"}
+                .joinToString(separator="\n")
+        assertEquals(expectedForecast,
                 result.dataPoints.map { "${it.probability}% | ${it.forecastDate.format(formatter)}" }
                         .joinToString(separator="\n"))
     }
@@ -79,33 +58,40 @@ class ForecasterTest {
         events.forecastRequest.push(ForecastRequest(32, LocalDate.of(2017, 3, 5)))
 
         // Then we should be provided with a really predictable result
-        val expectedForecast =
-                """
-            100% | 2017-04-30
-            95% | 2017-04-30
-            90% | 2017-04-30
-            85% | 2017-04-30
-            80% | 2017-04-30
-            75% | 2017-04-30
-            70% | 2017-04-30
-            65% | 2017-04-30
-            60% | 2017-04-30
-            55% | 2017-04-30
-            50% | 2017-04-30
-            45% | 2017-04-30
-            40% | 2017-04-30
-            35% | 2017-04-30
-            30% | 2017-04-30
-            25% | 2017-04-30
-            20% | 2017-04-30
-            15% | 2017-04-30
-            10% | 2017-04-30
-            5% | 2017-04-30
-            0% | 2017-04-29
-            """
-        assertEquals(expectedForecast.trimIndent(),
+        val expectedForecast =listOf(100, 95, 90, 85, 80, 75, 70, 65, 60, 55, 50, 45, 40, 35, 30, 25, 20, 15, 10, 5, 0)
+                .map {if (it == 0) "0% | 2017-04-29" else "$it% | 2017-04-30"}
+                .joinToString(separator="\n")
+        assertEquals(expectedForecast,
                 result.dataPoints.map { "${it.probability}% | ${it.forecastDate.format(formatter)}" }
                         .joinToString(separator="\n"))
+    }
+
+    @Test
+    fun `should be able to use a partial distribution`() {
+        // Given a bimodal sample set that finishes on 25th Feb
+        val startDate = LocalDate.of(2017, 1, 1).minusDays(7)
+        val distribution = WeeklyDistribution(toDistribution(listOf(8, 8, 4, 4, 4, 4, 4, 4, 4), startDate))
+
+        // And a forecaster listening for events, and to which we are listening
+        val events = Events()
+        val forecaster = Forecaster(events)
+
+        var result : Forecast = Forecast(listOf())
+        events.forecastNotification.subscribe { result = it }
+
+        // When we request a forecast for the distribution from the point the team ramped up
+        events.weeklyDistributionChangeNotification.push(distribution)
+        events.weeklyDistributionSelectionRequest.push(listOf(2, 3, 4, 5, 6, 7, 8))
+        events.forecastRequest.push(ForecastRequest(32, null))
+
+        // Then we should be provided with exactly the same distribution as before.
+        val expectedForecast =listOf(100, 95, 90, 85, 80, 75, 70, 65, 60, 55, 50, 45, 40, 35, 30, 25, 20, 15, 10, 5, 0)
+                .map {if (it == 0) "0% | 2017-04-22" else "$it% | 2017-04-23"}
+                .joinToString(separator="\n")
+        assertEquals(expectedForecast,
+                result.dataPoints.map { "${it.probability}% | ${it.forecastDate.format(formatter)}" }
+                        .joinToString(separator="\n"))
+
     }
 
     private fun toDistribution(numOfStoriesClosed: List<Int>, startDate: LocalDate): List<StoriesClosedInWeek> {

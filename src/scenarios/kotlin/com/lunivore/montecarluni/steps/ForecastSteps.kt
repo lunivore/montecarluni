@@ -1,11 +1,13 @@
 package com.lunivore.montecarluni.steps
 
+import com.lunivore.montecarluni.app.DataPointPresenter
 import com.lunivore.montecarluni.glue.Scenario
 import com.lunivore.montecarluni.glue.World
 import com.lunivore.stirry.Stirry.Companion.findInRoot
 import com.lunivore.stirry.Stirry.Companion.findRoot
 import com.lunivore.stirry.Stirry.Companion.runOnPlatform
 import com.lunivore.stirry.fireAndStir
+import com.lunivore.stirry.pickDateAndStir
 import com.lunivore.stirry.setTextAndStir
 import javafx.scene.control.*
 import org.junit.Assert
@@ -20,14 +22,19 @@ class ForecastSteps(val world: World) : Scenario(world) {
         })
 
         When("^I ask for a forecast for (\\d+) stories starting on (.*)$", {number: Int, date : String ->
-            findInRoot<DatePicker>({it.id == "forecastStartDateInput"}).value.value = toDate(date)
+            findInRoot<DatePicker>({it.id == "forecastStartDateInput"})?.value.pickDateAndStir(date)
             requestForecast(number)
         })
 
-        Then("^I should see a percentage forecast$", { expectedForecast: String ->
-            val forecast = findInRoot<TableView<Map<String, String>>>({it.id == "forecastOutput"}).value
+        When("^I ask for a forecast for (\\d+) stories using rows (\\d+) onwards$", {numberOfStories: Int, fromRow : Int ->
+            SelectionSteps(world).select(fromRow)
+            requestForecast(numberOfStories)
+        })
 
-            val forecastAsString = forecast.items.map { "${it["probability"]} | ${it["forecastDate"]}" }
+        Then("^I should see a percentage forecast$", { expectedForecast: String ->
+            val forecast = findInRoot<TableView<DataPointPresenter>>({it.id == "forecastOutput"}).value
+
+            val forecastAsString = forecast.items.map { "${it.probabilityAsPercentageString} | ${it.dateAsString}" }
                     .joinToString(separator = "\n")
 
             assertEquals(expectedForecast, forecastAsString)

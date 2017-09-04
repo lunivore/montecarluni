@@ -23,6 +23,7 @@ from 2017-03-31 to 2017-04-06 | 6
 """
 
 Scenario: Can copy the distribution to the clipboard
+
 Given "/example_files/closed_only_JIRA.csv" is imported
 When I copy it to the clipboard
 Then pasting it elsewhere should result in
@@ -30,3 +31,11 @@ Then pasting it elsewhere should result in
 1, 2, 4, 16, 9, 6, 7, 7, 4, 3, 13, 3, 15, 6
 """
 
+Scenario: Can copy selection to the clipboard
+
+Given "/example_files/closed_only_JIRA.csv" is imported
+When I copy rows 4 onwards to the clipboard
+Then pasting it elsewhere should result in
+"""
+16, 9, 6, 7, 7, 4, 3, 13, 3, 15, 6
+"""

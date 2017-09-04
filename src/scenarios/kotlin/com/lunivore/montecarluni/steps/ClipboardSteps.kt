@@ -17,6 +17,13 @@ class ClipboardSteps(val world : World) : Scenario(world) {
             }.value.fireAndStir()
         })
 
+        When("^I copy rows (\\d+) onwards to the clipboard$", {fromRow : Int ->
+            SelectionSteps(world).select(fromRow)
+            findInRoot<Button> {
+                it.id == "clipboardButton"
+            }.value.fireAndStir()
+        })
+
         Then("^pasting it elsewhere should result in$", {expectedDistributionAsOneLine : String ->
             val text = getClipboard(javafx.scene.input.DataFormat.PLAIN_TEXT)
 

@@ -1,6 +1,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.control.cell.MapValueFactory?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.layout.*?>
 <GridPane xmlns:fx="http://javafx.com/fxml"
           alignment="center" hgap="10" vgap="10">
@@ -18,22 +18,25 @@
 
     <TableView fx:id="distributionOutput"
                GridPane.columnIndex="0" GridPane.rowIndex="2"
-               GridPane.columnSpan="3" prefHeight="400">
+               GridPane.columnSpan="3" prefHeight="400" editable="false">
         <columns>
             <TableColumn text="Date Range" id="dateRangeColumn" prefWidth="400">
                 <cellValueFactory>
-                    <MapValueFactory key="dateRange"/>
+                    <PropertyValueFactory property="rangeAsString"/>
                 </cellValueFactory>
             </TableColumn>
             <TableColumn text="# Stories" id="numberOfStoriesColumn" prefWidth="100">
                 <cellValueFactory>
-                    <MapValueFactory key="numberOfStories"/>
+                    <PropertyValueFactory property="count"/>
                 </cellValueFactory>
             </TableColumn>
         </columns>
     </TableView>
 
+    <Label text="Use / copy selection only" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+    <CheckBox id="useSelectionInput" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
     <Button fx:id="clipboardButton" text="Copy distrbution to clipboard"
-            GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+            GridPane.columnIndex="0" GridPane.rowIndex="4"/>
 
 </GridPane>
