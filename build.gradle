@@ -69,7 +69,14 @@ task("copyStirry") {
 scenariosClasses.dependsOn("copyStirry")
 // End using Stirry from Github
 
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
 dependencies {
+
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     compile "com.opencsv:opencsv:$openCsvVersion"
     compile "org.reactfx:reactfx:$reactFxVersion"

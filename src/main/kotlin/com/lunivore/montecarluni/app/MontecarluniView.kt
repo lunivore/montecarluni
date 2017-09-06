@@ -5,95 +5,155 @@ import com.lunivore.montecarluni.model.ClipboardRequest
 import com.lunivore.montecarluni.model.Forecast
 import com.lunivore.montecarluni.model.ForecastRequest
 import com.lunivore.montecarluni.model.WeeklyDistribution
+import javafx.beans.property.SimpleBooleanProperty
+import javafx.beans.property.SimpleObjectProperty
+import javafx.beans.property.SimpleStringProperty
 import javafx.collections.FXCollections
-import javafx.event.ActionEvent
-import javafx.scene.control.*
-import javafx.scene.layout.GridPane
+import javafx.scene.control.TableView
+import javafx.util.StringConverter
 import org.apache.logging.log4j.LogManager
-import org.reactfx.EventStreams
-import tornadofx.View
+import tornadofx.*
+import java.time.LocalDate
 
 class MontecarluniView : View(){
-    override val root: GridPane by fxml()
-    val importButton: Button by fxid()
-    val filenameInput : TextField by fxid()
-    val numStoriesForecastInput : TextField by fxid()
-    val forecastStartDateInput: DatePicker by fxid()
-    val useSelectionInput : CheckBox by fxid()
-    val distributionOutput : TableView<StoriesClosedInWeekPresenter> by fxid()
-    val forecastButton : Button by fxid()
-    val forecastOutput : TableView<DataPointPresenter> by fxid()
-    val clipboardButton : Button by fxid()
-    val clearButton : Button by fxid()
 
+    val filename = SimpleStringProperty()
+    val numStoriesToForecast = SimpleObjectProperty<Int>()
+    val forecastStartDate = SimpleObjectProperty<LocalDate>()
+    val useSelection = SimpleBooleanProperty()
+
+    val distribution = FXCollections.observableArrayList<StoriesClosedInWeekPresenter>()
+    val forecast = FXCollections.observableArrayList<DataPointPresenter>()
 
     val events : Events by di()
     val errorHandler = ErrorHandler()
     val logger = LogManager.getLogger()
 
+    var distributionOutput by singleAssign<TableView<StoriesClosedInWeekPresenter>>()
+
+
+    override val root = hbox {
+        title="Montecarluni"
+
+        borderpane {
+            addClass(Styles.borderBox)
+            top = hbox {
+                addClass(Styles.buttonBox)
+                label("Filename for import:")
+                textfield(filename){ id = "filenameInput"}
+                button("Import"){id = "importButton"}.setOnAction { import() }
+            }
+            center = hbox {
+                distributionOutput = tableview<StoriesClosedInWeekPresenter>(distribution) {
+                    column("Date range", StoriesClosedInWeekPresenter::rangeAsString) { prefWidth = 400.0 }
+                    column("# stories closed", StoriesClosedInWeekPresenter::count) { prefWidth = 100.0 }
+                    id="distributionOutput"
+                    selectionModel.selectionMode= javafx.scene.control.SelectionMode.MULTIPLE
+                    prefHeight=400.0
+                }
+            }
+            bottom = vbox {
+                hbox {
+                    addClass(Styles.buttonBox)
+                    label("Use / copy selection only")
+                    checkbox() {id="useSelectionInput"}.bind(useSelection)
+                }
+                hbox {
+                    addClass(Styles.buttonBox)
+                    button("Copy distribution to clipboard") {id="clipboardButton"}
+                            .setOnAction { clipboard() }
+                    button("Clear") { id="clearButton"}.setOnAction { clearView() }
+                }
+            }
+        }
+        borderpane {
+            addClass(Styles.borderBox)
+            top = gridpane {
+                addClass(Styles.buttonBox)
+                label("Start date (optional)") {gridpaneConstraints {columnRowIndex(0, 0)}}
+                datepicker(forecastStartDate) {
+                    id="forecastStartDateInput"
+                    gridpaneConstraints {columnRowIndex(1, 0)}
+                }
+                label("Number of stories to complete") {gridpaneConstraints { columnRowIndex(0, 1)}}
+                textfield(numStoriesToForecast, IntObjectConverter()) {
+                    id="numStoriesForecastInput"
+                    gridpaneConstraints {columnRowIndex(1, 1)}
+                }
+                button("Run forecast"){
+                    id="forecastButton"
+                    gridpaneConstraints { columnRowIndex(2, 1) }
+                }.setOnAction { forecast() }
+            }
+            center=hbox {
+                tableview<DataPointPresenter>(forecast){
+                    column("Probability", DataPointPresenter::probabilityAsPercentageString) { prefWidth = 400.0 }
+                    column("Forecast Date", DataPointPresenter::dateAsString) { prefWidth = 100.0 }
+                    id="forecastOutput"
+                }
+            }
+        }
+    }
+
+
     init {
-        initFileImporting()
-        initClipboardButton()
-        initWeeklyDistribution()
-        initForecasting()
-        initClear()
-
-        events.messageNotification.subscribe { errorHandler.handleNotification(it) }
-    }
-
-    private fun initClear() {
-        EventStreams.eventsOf(clearButton, ActionEvent.ACTION).subscribe({
-            filenameInput.textProperty().set("")
-            useSelectionInput.selectedProperty().setValue(false)
-            forecastStartDateInput.valueProperty().set(null)
-            numStoriesForecastInput.textProperty().set("")
-            events.clearRequest.push(null)
-        })
-    }
-
-    private fun initForecasting() {
-        EventStreams.eventsOf(forecastButton, ActionEvent.ACTION).subscribe({
-            logger.debug("Requesting forecast; selection = ${useSelectionInput.isSelected}")
-            events.forecastRequest.push(
-                    ForecastRequest(numStoriesForecastInput.textProperty().value.toInt(), forecastStartDateInput.value,
-                            useSelectionInput.isSelected, distributionOutput.selectionModel.selectedIndices))
-        })
-        events.forecastNotification.subscribe(updateForecastOutput(forecastOutput),
+        events.forecastNotification.subscribe(updateForecastOutput(),
                 { errorHandler.handleError(it) })
-    }
-
-    private fun initWeeklyDistribution() {
-        distributionOutput.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        events.messageNotification.subscribe { errorHandler.handleNotification(it) }
         events.weeklyDistributionChangeNotification.subscribe(updateDistributionOutput(),
                 { errorHandler.handleError(it) })
+
+
     }
 
-    private fun initClipboardButton() {
-        EventStreams.eventsOf(clipboardButton, ActionEvent.ACTION).subscribe({
-            events.clipboardCopyRequest.push(
-                    ClipboardRequest(useSelectionInput.isSelected, distributionOutput.selectionModel.selectedIndices))
-        }, { errorHandler.handleError(it) })
+    private fun forecast() {
+        events.forecastRequest.push(
+                ForecastRequest(
+                        numStoriesToForecast.value,
+                        forecastStartDate.value,
+                        useSelection.value,
+                        distributionOutput.selectionModel.selectedIndices))
     }
 
-    private fun initFileImporting() {
-        EventStreams.eventsOf(importButton, ActionEvent.ACTION).subscribe({
-            events.fileImportRequest.push(filenameInput.text)
-        }, { errorHandler.handleError(it) })
+    private fun clearView() {
+        filename.set("")
+        useSelection.set(false)
+        forecastStartDate.set(null)
+        numStoriesToForecast.set(null)
+        events.clearRequest.push(null)
     }
 
-    private fun  updateForecastOutput(forecastOutput: TableView<DataPointPresenter>): ((Forecast) -> Unit)? {
+    private fun clipboard() {
+        events.clipboardCopyRequest.push(
+                ClipboardRequest(useSelection.value, distributionOutput.selectionModel.selectedIndices))
+    }
+
+    private fun import() {
+        events.fileImportRequest.push(filename.value)
+    }
+
+    private fun  updateForecastOutput(): ((Forecast) -> Unit)? {
         return {
-            logger.debug("Forecast detected by app")
-            forecastOutput.items = FXCollections.observableList(
-                    it.dataPoints.map { DataPointPresenter(it) })
+            forecast.clear()
+            forecast.addAll(it.dataPoints.map { DataPointPresenter(it) })
         }
     }
 
     private fun updateDistributionOutput(): (WeeklyDistribution) -> Unit {
         return {
-            logger.debug("Weekly distribution change detected by app")
-            distributionOutput.items = FXCollections.observableList(
-                    it.storiesClosed.map { StoriesClosedInWeekPresenter(it) })
+            distribution.clear()
+            distribution.addAll(it.storiesClosed.map { StoriesClosedInWeekPresenter(it) })
         }
     }
+}
+
+class IntObjectConverter : StringConverter<Int>() {
+    override fun fromString(string: String?): Int? {
+        return string?.toInt()
+    }
+
+    override fun toString(input: Int?): String {
+        return input?.toString() ?: ""
+    }
+
 }
