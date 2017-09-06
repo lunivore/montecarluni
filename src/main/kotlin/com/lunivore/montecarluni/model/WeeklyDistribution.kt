@@ -4,17 +4,10 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 data class WeeklyDistribution(val storiesClosed : List<StoriesClosedInWeek>) {
-    val lineSeparatorForExcel = "\n"
-
-    val distributionAsString: String
-        get(){
-            return storiesClosed.map { it.count }.joinToString(separator = lineSeparatorForExcel)
-        }
-
-    fun distributionAsString(selection : List<Int>) : String {
-        return storiesClosed.filterIndexed{index, content -> selection.contains(index)}
-                .map { it.count }.joinToString(separator = lineSeparatorForExcel)
+    companion object {
+        val EMPTY = WeeklyDistribution(listOf())
     }
+
 }
 
 data class StoriesClosedInWeek(val range : DateRange, val count : Int) {

@@ -20,6 +20,7 @@ class DistributionCalculator(val events: Events) {
                 events.messageNotification.push(UserNotification("Some of the records had neither a resolved nor an updated date"))
             }
         }
+        events.clearRequest.subscribe { events.weeklyDistributionChangeNotification.push(WeeklyDistribution.EMPTY) }
     }
 
     val neverUsed = LocalDateTime.of(1970, 1, 1, 0, 0)

@@ -82,6 +82,22 @@ class DistributionCalculatorTest {
         val expectedProblem = UserNotification("Some of the records had neither a resolved nor an updated date")
         assertEquals(expectedProblem, problem)
     }
+
+    @Test
+    fun `should clear down results when requested`() {
+        // Given we've generated a distribution
+        var results = WeeklyDistribution(listOf<StoriesClosedInWeek>())
+        events.weeklyDistributionChangeNotification.subscribe { results = it }
+        val records = listOf(1, 1, 1, 8, 15, 15, 22)
+                .map { Record(LocalDateTime.of(2017, 1, it, 12, 0, 0), null) }
+        events.recordsParsedNotification.push(records)
+
+        // When the clear request arrives
+        events.clearRequest.push(null)
+
+        // Then we should send an empty distribution back.
+        assertEquals(WeeklyDistribution.EMPTY, results)
+    }
 }
 
 

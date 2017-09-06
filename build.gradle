@@ -2,11 +2,13 @@ group 'lunivore.com'
 version '0.0.3-20170516'
 
 buildscript {
-    ext.kotlinVersion = '1.1.1'
+    ext.kotlinVersion = '1.1.2'
     ext.junitVersion  = '4.12'
     ext.log4jVersion = '2.8.2'
     ext.mockitoVersion = '1.10.19'
     ext.reactFxVersion = '1.4.1'
+    ext.tornadoFxVersion = '1.7.10'
+    ext.guiceVersion = '4.0'
     ext.openCsvVersion = '3.9'
     ext.stirryVersion = '0.2.1-20170825'
     ext.cucumberJava8Version = '2.0.0-SNAPSHOT'
@@ -73,6 +75,8 @@ dependencies {
     compile "org.reactfx:reactfx:$reactFxVersion"
     compile "org.apache.logging.log4j:log4j-api:$log4jVersion"
     compile "org.apache.logging.log4j:log4j-core:$log4jVersion"
+    compile "no.tornado:tornadofx:$tornadoFxVersion"
+    compile "com.google.inject:guice:$guiceVersion"
 
     testCompile "junit:junit:$junitVersion"
     testCompile "org.mockito:mockito-all:$mockitoVersion"
@@ -88,6 +92,8 @@ dependencies {
     scenariosCompile "io.cucumber:cucumber-picocontainer:$cucumberPicocontainerVersion"
     scenariosCompile "org.apache.logging.log4j:log4j-api:$log4jVersion"
     scenariosCompile "org.apache.logging.log4j:log4j-core:$log4jVersion"
+    scenariosCompile "no.tornado:tornadofx:$tornadoFxVersion"
+    scenariosCompile "com.google.inject:guice:$guiceVersion"
 
     scenariosRuntime "junit:junit:$junitVersion"
     scenariosRuntime "com.lunivore.stirry:stirry:$stirryVersion"

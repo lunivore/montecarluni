@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.*?>
+<GridPane xmlns:fx="http://javafx.com/fxml/1" hgap="10" vgap="10" stylesheets="@style.css">
+    <padding>
+        <Insets top="25" right="25" bottom="25" left="25"/>
+    </padding>
+    <Label text="Filename for Import:" prefWidth="120"
+           GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+
+    <TextField fx:id="filenameInput" prefWidth="200"
+               GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+    <Button fx:id="importButton" text="Import"
+            GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+
+    <TabPane GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.columnSpan="3">
+        <tabs>
+            <Tab text="Weekly Distribution" closable="false" id="importTab">
+                <VBox xmlns:fx="http://javafx.com/fxml">
+
+                    <TableView fx:id="distributionOutput"
+                               GridPane.columnIndex="0" GridPane.rowIndex="2"
+                               GridPane.columnSpan="3" prefHeight="400" editable="false">
+                        <columns>
+                            <TableColumn text="Date Range" id="dateRangeColumn" prefWidth="400">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="rangeAsString"/>
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn text="# Stories" id="numberOfStoriesColumn" prefWidth="100">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="count"/>
+                                </cellValueFactory>
+                            </TableColumn>
+                        </columns>
+                    </TableView>
+                    <HBox>
+                        <Label text="Use / copy selection only" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                        <CheckBox fx:id="useSelectionInput" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                    </HBox>
+
+                    <HBox>
+                        <Button fx:id="clipboardButton" text="Copy distrbution to clipboard"/>
+                        <Button fx:id="clearButton" text="Clear"/>
+                    </HBox>
+
+                </VBox>
+            </Tab>
+        </tabs>
+    </TabPane>
+    <GridPane alignment="center" hgap="10" vgap="10" GridPane.rowIndex="0" GridPane.columnIndex="4"
+              GridPane.rowSpan="2">
+
+
+        <Label text="Start date (optional):"
+               GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <DatePicker fx:id="forecastStartDateInput"
+                    prefWidth="200"
+                    GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+        <Label text="Number of stories left to complete:"
+               GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <TextField fx:id="numStoriesForecastInput"
+                   prefWidth="200"
+                   GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+        <Button fx:id="forecastButton" text="Run forecast" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+
+        <TableView fx:id="forecastOutput"
+                   GridPane.columnIndex="0" GridPane.rowIndex="2"
+                   GridPane.columnSpan="3" GridPane.vgrow="ALWAYS">
+
+            <columns>
+                <TableColumn text="Probability" id="probability" prefWidth="100">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="probabilityAsPercentageString"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Date" id="forecastDate" prefWidth="400">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="dateAsString"/>
+                    </cellValueFactory>
+                </TableColumn>
+            </columns>
+        </TableView>
+    </GridPane>
+</GridPane>

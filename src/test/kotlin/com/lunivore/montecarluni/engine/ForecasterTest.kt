@@ -81,8 +81,7 @@ class ForecasterTest {
 
         // When we request a forecast for the distribution from the point the team ramped up
         events.weeklyDistributionChangeNotification.push(distribution)
-        events.weeklyDistributionSelectionRequest.push(listOf(2, 3, 4, 5, 6, 7, 8))
-        events.forecastRequest.push(ForecastRequest(32, null))
+        events.forecastRequest.push(ForecastRequest(32, null, true, listOf(2, 3, 4, 5, 6, 7, 8)))
 
         // Then we should be provided with exactly the same distribution as before.
         val expectedForecast =listOf(100, 95, 90, 85, 80, 75, 70, 65, 60, 55, 50, 45, 40, 35, 30, 25, 20, 15, 10, 5, 0)
@@ -93,6 +92,25 @@ class ForecasterTest {
                         .joinToString(separator="\n"))
 
     }
+
+    @Test
+    fun shouldNotReactToEmptyDistributions() {
+
+        // Given we created a forecast
+        val startDate = LocalDate.of(2017, 1, 1)
+        val distribution = WeeklyDistribution(toDistribution(listOf(4, 4, 4, 4, 4, 4, 4, 4), startDate))
+        val events = Events()
+        val forecaster = Forecaster(events)
+        var result : Forecast = Forecast(listOf())
+        events.forecastNotification.subscribe { result = it }
+        events.weeklyDistributionChangeNotification.push(distribution)
+        events.forecastRequest.push(ForecastRequest(32, null))
+
+        // When an empty distribution comes through
+        events.weeklyDistributionChangeNotification.push(WeeklyDistribution.EMPTY)
+
+        // Then the forecast should be cleared
+        assertEquals(0, result.dataPoints.size)    }
 
     private fun toDistribution(numOfStoriesClosed: List<Int>, startDate: LocalDate): List<StoriesClosedInWeek> {
         return numOfStoriesClosed.mapIndexed { index, distribution ->

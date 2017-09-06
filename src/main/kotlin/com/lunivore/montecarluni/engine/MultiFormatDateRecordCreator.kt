@@ -51,7 +51,7 @@ class MultiFormatDateRecordCreator(events: Events) {
     private fun extractDate(lines: MutableList<Array<String>>, resolvedIndex: Int): List<String> {
         return lines.subList(1, lines.size)
                 .fold(listOf<String>()) { dates, value ->
-                    if (value != null) dates.plus(value[resolvedIndex])
+                    if (!value.isEmpty()) dates.plus(value[resolvedIndex])
                     else dates
                 }
     }

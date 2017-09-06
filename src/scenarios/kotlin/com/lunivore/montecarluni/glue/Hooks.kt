@@ -4,6 +4,7 @@ import com.lunivore.montecarluni.Montecarluni
 import com.lunivore.stirry.Stirry
 import cucumber.api.java.After
 import cucumber.api.java.Before
+import tornadofx.Scope
 
 class Hooks constructor() {
 
@@ -13,6 +14,7 @@ class Hooks constructor() {
     fun initializeStirry() {
         Stirry.initialize()
         montecarluni = Montecarluni()
+        montecarluni.scope = Scope()
         Stirry.launchApp(montecarluni)
 
     }

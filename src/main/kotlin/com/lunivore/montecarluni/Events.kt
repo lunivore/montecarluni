@@ -10,14 +10,14 @@ class Events {
     val logger = LogManager.getLogger()
 
     var fileImportRequest = EventSource<String>()
-    val clipboardCopyRequest = EventSource<Unit>()
+    val clipboardCopyRequest = EventSource<ClipboardRequest>()
     val weeklyDistributionChangeNotification = EventSource<WeeklyDistribution>()
     val inputLoadedNotification = EventSource<InputStream>()
     val recordsParsedNotification = EventSource<List<Record>>()
     val messageNotification = EventSource<UserNotification>()
     val forecastRequest = EventSource<ForecastRequest>()
     val forecastNotification = EventSource<Forecast>()
-    val weeklyDistributionSelectionRequest = EventSource<List<Int>?>()
+    val  clearRequest = EventSource<Unit>()
 
     val  All = listOf(
             fileImportRequest,
@@ -28,7 +28,7 @@ class Events {
             messageNotification,
             forecastRequest,
             forecastNotification,
-            weeklyDistributionSelectionRequest)
+            clearRequest)
 
     init {
         fileImportRequest.subscribe { logger.debug("File import requested: $it") }
@@ -37,8 +37,11 @@ class Events {
         inputLoadedNotification.subscribe { logger.debug("Input loaded") }
         recordsParsedNotification.subscribe { logger.debug("Records parsed") }
         messageNotification.subscribe { logger.debug("Message created: ${it.message}") }
+        forecastRequest.subscribe { logger.debug("Forecast requested") }
         forecastNotification.subscribe { logger.debug("Forecast created") }
-        weeklyDistributionSelectionRequest.subscribe { logger.debug("Weekly distribution selected") }
+        clearRequest.subscribe { logger.debug("Cleardown requested") }
     }
+
+
 }
 

@@ -1,26 +1,26 @@
 package com.lunivore.montecarluni
 
-import com.lunivore.montecarluni.app.ClipboardCopier
-import com.lunivore.montecarluni.app.MontecarluniApp
-import com.lunivore.montecarluni.engine.DistributionCalculator
-import com.lunivore.montecarluni.engine.FileInputStreamProvider
-import com.lunivore.montecarluni.engine.Forecaster
-import com.lunivore.montecarluni.engine.MultiFormatDateRecordCreator
+import com.google.inject.Guice
+import com.lunivore.montecarluni.app.MontecarluniView
+import com.lunivore.montecarluni.app.Styles
 import javafx.application.Application
 import javafx.stage.Stage
 import org.apache.logging.log4j.LogManager
+import tornadofx.App
+import tornadofx.DIContainer
+import tornadofx.FX
+import kotlin.reflect.KClass
 
-class Montecarluni : Application() {
-    override fun start(primaryStage: Stage) {
-        logger.debug("Starting Montecarluni...")
-        var events = Events()
-        var inputProvider = FileInputStreamProvider(events)
-        var distributionCalculator = DistributionCalculator(events)
-        var recordCreator = MultiFormatDateRecordCreator(events)
-        var clipboardCopier = ClipboardCopier(events)
-        var forecaster = Forecaster(events)
-        MontecarluniApp(events).start(primaryStage)
-        logger.debug("...Montecarluni started successfully.")
+class Montecarluni : App(MontecarluniView::class, Styles::class) {
+
+    override fun start(stage: Stage) {
+        val guice = Guice.createInjector(MModule())
+
+        FX.dicontainer = object : DIContainer {
+            override fun <T : Any> getInstance(type: KClass<T>)
+                    = guice.getInstance(type.java)
+        }
+        super.start(stage)
     }
 
     companion object {
