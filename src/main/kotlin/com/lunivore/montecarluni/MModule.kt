@@ -5,7 +5,7 @@ import com.lunivore.montecarluni.app.ClipboardCopier
 import com.lunivore.montecarluni.engine.DistributionCalculator
 import com.lunivore.montecarluni.engine.FileInputStreamProvider
 import com.lunivore.montecarluni.engine.Forecaster
-import com.lunivore.montecarluni.engine.MultiFormatDateRecordCreator
+import com.lunivore.montecarluni.engine.RecordCreator
 
 class MModule : AbstractModule() {
     override fun configure() {
@@ -14,7 +14,7 @@ class MModule : AbstractModule() {
 
         var inputProvider = FileInputStreamProvider(events)
         var distributionCalculator = DistributionCalculator(events)
-        var recordCreator = MultiFormatDateRecordCreator(events)
+        var recordCreator = RecordCreator(events)
         var clipboardCopier = ClipboardCopier(events)
         var forecaster = Forecaster(events)
     }
