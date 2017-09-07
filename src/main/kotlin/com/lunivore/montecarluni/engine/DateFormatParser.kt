@@ -1,6 +1,8 @@
 package com.lunivore.montecarluni.engine
 
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeFormatterBuilder
+import java.time.temporal.ChronoField
 
 class DateFormatParser : (List<String>) -> DateTimeFormatter {
 
@@ -10,10 +12,10 @@ class DateFormatParser : (List<String>) -> DateTimeFormatter {
         return parseDateFormat(p1)
     }
     private fun  parseDateFormat(dateTimes: List<String>): DateTimeFormatter {
-        val pattern = Regex("\\d+.(?:\\w|\\d)+.\\d+ \\d*:\\d*\\s?\\w*")
+        val pattern = Regex("\\d+.(?:\\w|\\d)+.\\d+( \\d*:\\d*\\s?\\w*)?")
 
         if (!pattern.matches(dateTimes[0])) {
-            throw IllegalArgumentException("The first date found in the Resolved column - ${dateTimes[0]} - did not match any recognized pattern.")
+            throw IllegalArgumentException("The first date found - ${dateTimes[0]} - did not match any recognized pattern.")
         }
 
         val yearOrDayFormat = parseYearOrDayFormat(dateTimes)
@@ -28,14 +30,20 @@ class DateFormatParser : (List<String>) -> DateTimeFormatter {
         dateFormat += monthFormat
         dateFormat += delimiter
         dateFormat += yearOrDayFormat.second
-        dateFormat += " "
         dateFormat += timeFormat
 
-        return DateTimeFormatter.ofPattern(dateFormat)
+        if (timeFormat.isEmpty()) {
+            dateFormat += "[ HH:mm:ss]"
+            return DateTimeFormatterBuilder().appendPattern(dateFormat)
+                    .parseDefaulting(ChronoField.HOUR_OF_DAY, 0)
+                    .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)
+                    .parseDefaulting(ChronoField.SECOND_OF_MINUTE, 0)
+                    .toFormatter();
+        } else { return DateTimeFormatter.ofPattern(dateFormat) }
     }
 
     private fun  parseMonthFormat(dateTimes: List<String>): String {
-        val pattern = Regex("\\d+\\D((?:\\w|\\d)+)\\D\\d+ .*")
+        val pattern = Regex("\\d+\\D((?:\\w|\\d)+)\\D\\d+( )?.*")
         val result = pattern.matchEntire(dateTimes[0]) ?: throw Exception(alreadyCheckedExceptionMsg)
 
         var month = result.groups[1]?.value ?: ""
@@ -62,19 +70,22 @@ class DateFormatParser : (List<String>) -> DateTimeFormatter {
 
 
     private fun  parseTimeFormat(dateTimes: List<String>): String {
-        val pattern = Regex("\\d+.(?:\\w|\\d)+.\\d+ \\d*:\\d*\\s?(\\w*)")
+        val pattern = Regex("\\d+.(?:\\w|\\d)+.\\d+( \\d*:\\d*\\s?(\\w*))?")
         val result = pattern.matchEntire(dateTimes[0]) ?: throw Exception(alreadyCheckedExceptionMsg)
 
-        var amPm = result.groups[1]?.value ?: ""
+        val doesNotHaveTime = result.groups[2] == null
+        if (doesNotHaveTime) { return "" }
+
+        var amPm = result.groups[2]?.value ?: ""
         val twentyfourHours = amPm.isEmpty()
 
         val doubleDigitHours = if (twentyfourHours) true else { dateTimes.all {Regex(".* \\d\\d:\\d\\d\\s?\\w*").matches(it)}}
-        return if (twentyfourHours) "HH:mm" else { if (doubleDigitHours) "hh:mm a" else "h:mm a" }
+        return " " + if (twentyfourHours) "HH:mm" else { if (doubleDigitHours) "hh:mm a" else "h:mm a" }
     }
 
     private fun  parseYearOrDayFormat(dateTimes: List<String>): Pair<String, String>{
 
-        val pattern = Regex("(\\d+).(?:\\w|\\d)+.(\\d+) \\d*:\\d*\\s?\\w*")
+        val pattern = Regex("(\\d+).(?:\\w|\\d)+.(\\d+)(?: \\d*:\\d*\\s?\\w*)?")
         val result = pattern.matchEntire(dateTimes[0]) ?: throw Exception(alreadyCheckedExceptionMsg)
 
         var yearOrDayInGroup1 = result.groups[1]?.value ?: ""

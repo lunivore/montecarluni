@@ -67,4 +67,22 @@ class DateFormatParserTest {
         Assert.assertEquals(expectedResults, results)
     }
 
+    @Test
+    fun `should handle dates without times`() {
+        // Given a list of dates without times
+        val input = listOf("21/Jan/17", "02/Feb/17", "29/Dec/16")
+
+        // When we parse the format of the dates
+        val formatter = DateFormatParser()(input)
+        val results = input.map { LocalDateTime.parse(it, formatter)}
+
+        // Then they should have no time on them
+        val expectedResults = listOf<LocalDateTime?>(
+                LocalDateTime.of(2017, 1, 21,0, 0, 0),
+                LocalDateTime.of(2017, 2, 2, 0, 0, 0),
+                LocalDateTime.of(2016, 12, 29, 0, 0, 0))
+
+        Assert.assertEquals(expectedResults, results)
+    }
+
 }
