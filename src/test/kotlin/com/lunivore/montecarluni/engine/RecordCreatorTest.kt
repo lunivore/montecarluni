@@ -3,6 +3,7 @@ package com.lunivore.montecarluni.engine
 import com.lunivore.montecarluni.Events
 import com.lunivore.montecarluni.model.Record
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Before
 import org.junit.Test
 import java.io.ByteArrayInputStream
@@ -22,7 +23,7 @@ class RecordCreatorTest {
     }
 
     @Test
-    fun shouldFindTheDetailsOfWhenStoriesWereResolved() {
+    fun `should find the details of when work items were resolved`() {
 
         // Given a CSV parser to which we're subscribed
         var results = listOf<Record>()
@@ -76,6 +77,23 @@ class RecordCreatorTest {
 
         assertEquals(expectedResults, results)
 
+    }
+
+    @Test
+    fun `should send an error message if any dates are missing`() {
+        // Given a CSV parser for which we're listening for notifications
+        var message = ""
+        events.messageNotification.subscribe { message = it.message }
+
+        // When we give it a list of records with dates missing
+        val input = """Name,Created,Updated,Resolved,By
+                story,ignored date,,, whoever
+                """.trimIndent()
+        val inputStream = ByteArrayInputStream(input.toByteArray())
+        events.inputLoadedNotification.push(inputStream)
+
+        // Then we should be told that that's a problem
+        assertFalse(message.isEmpty())
     }
 
     fun createCsvInputStreamWithResolvedDate(datetime: String): InputStream {

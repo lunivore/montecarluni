@@ -2,7 +2,7 @@ group 'lunivore.com'
 version '0.0.3-20170516'
 
 buildscript {
-    ext.kotlinVersion = '1.1.2'
+    ext.kotlinVersion = '1.1.1'
     ext.junitVersion  = '4.12'
     ext.log4jVersion = '2.8.2'
     ext.mockitoVersion = '1.10.19'

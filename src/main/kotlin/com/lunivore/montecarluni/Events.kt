@@ -7,22 +7,22 @@ import java.io.InputStream
 
 class Events {
 
-    val logger = LogManager.getLogger()
+    private val logger = LogManager.getLogger()
 
     var fileImportRequest = EventSource<String>()
     val clipboardCopyRequest = EventSource<ClipboardRequest>()
-    val weeklyDistributionChangeNotification = EventSource<WeeklyDistribution>()
+    val distributionChangeNotification = EventSource<Distributions>()
     val inputLoadedNotification = EventSource<InputStream>()
     val recordsParsedNotification = EventSource<List<Record>>()
     val messageNotification = EventSource<UserNotification>()
     val forecastRequest = EventSource<ForecastRequest>()
     val forecastNotification = EventSource<Forecast>()
-    val  clearRequest = EventSource<Unit>()
+    val clearRequest = EventSource<Unit>()
 
     val  All = listOf(
             fileImportRequest,
             clipboardCopyRequest,
-            weeklyDistributionChangeNotification,
+            distributionChangeNotification,
             inputLoadedNotification,
             recordsParsedNotification,
             messageNotification,
@@ -33,7 +33,7 @@ class Events {
     init {
         fileImportRequest.subscribe { logger.debug("File import requested: $it") }
         clipboardCopyRequest.subscribe { logger.debug("Clipboard copy requested") }
-        weeklyDistributionChangeNotification.subscribe { logger.debug("Weekly distribution changed") }
+        distributionChangeNotification.subscribe { logger.debug("Distribution changed") }
         inputLoadedNotification.subscribe { logger.debug("Input loaded") }
         recordsParsedNotification.subscribe { logger.debug("Records parsed") }
         messageNotification.subscribe { logger.debug("Message created: ${it.message}") }

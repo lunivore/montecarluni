@@ -9,6 +9,6 @@
         <Root level="Error">
             <AppenderRef ref="stdout"/>
         </Root>
-        <Logger name="com.lunivore.montecarluni" level="error"/>
+        <Logger name="com.lunivore.montecarluni" level="debug"/>
     </Loggers>
 </Configuration>

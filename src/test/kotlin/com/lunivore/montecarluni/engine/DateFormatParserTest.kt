@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 class DateFormatParserTest {
 
     @Test
-    fun shouldParseJirasExportedDateFormat() {
+    fun `should parse JIRA's expected date format`() {
 
         // Given a list of dates in Jira's godawful format
         val input = listOf("21/Jan/17 2:34 PM", "02/Feb/17 9:00 AM", "29/Dec/16 12:20 PM")
@@ -26,7 +26,7 @@ class DateFormatParserTest {
 
 
     @Test
-    fun shouldHandleMultipleDifferentDateTimeFormats() {
+    fun `should handle multiple different date formats`() {
         // Given a number of different types of date format
         val input = listOf(listOf("2017-04-03 08:25"), listOf("01 Jan 2017 01:27 PM"), listOf("8/9/2016 8:15 AM"))
 
@@ -45,7 +45,7 @@ class DateFormatParserTest {
     }
 
     @Test
-    fun shouldHandleDateFormatsWhereTheFormatIsNotObviousFromFirstDate() {
+    fun `should handle date formats where the format is not obvious`() {
         // Given a list of date strings with ambiguous formats
         // - completely ambiguous
         // - uses 2-day day

@@ -1,18 +1,18 @@
 package com.lunivore.montecarluni.app
 
 import com.lunivore.montecarluni.Events
+import com.lunivore.montecarluni.model.Distributions
 import com.lunivore.montecarluni.model.UserNotification
-import com.lunivore.montecarluni.model.WeeklyDistribution
 import javafx.application.Platform
 import javafx.scene.input.Clipboard
 import javafx.scene.input.ClipboardContent
 
 class ClipboardCopier(events: Events) {
     private val lineSeparatorForExcel = "\n"
-    private var  lastDistribution: WeeklyDistribution? = null
+    private var  lastDistribution: Distributions? = null
 
     init {
-        events.weeklyDistributionChangeNotification.subscribe { lastDistribution = it }
+        events.distributionChangeNotification.subscribe { lastDistribution = it }
 
         events.clipboardCopyRequest.subscribe {
             val distributionToUse = lastDistribution
@@ -21,10 +21,10 @@ class ClipboardCopier(events: Events) {
             } else {
                 val selection = it.selectedIndices
                 val toCopy = if (it.useSelection) {
-                    distributionToUse.storiesClosed.filterIndexed { index, content -> selection.contains(index) }
+                    distributionToUse.workItemsDone.filterIndexed { index, content -> selection.contains(index) }
                             .map { it.count }.joinToString(separator = lineSeparatorForExcel)
                 } else {
-                    distributionToUse.storiesClosed.map { it.count }.joinToString(separator = lineSeparatorForExcel)
+                    distributionToUse.workItemsDone.map { it.count }.joinToString(separator = lineSeparatorForExcel)
                 }
 
                 val content = ClipboardContent()

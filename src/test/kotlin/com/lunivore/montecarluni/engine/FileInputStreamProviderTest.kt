@@ -11,7 +11,7 @@ import java.io.InputStream
 class FileInputStreamProviderTest() {
 
     @Test
-    fun shouldLoadAFileAndConvertToAnInputStream() {
+    fun `should load a file and convert to an input stream`() {
         // Given a file that we know exists
         var license = "LICENSE.txt"
 
@@ -32,7 +32,7 @@ class FileInputStreamProviderTest() {
     }
 
     @Test
-    fun shouldStripTheQuotesFromAFileSoWeCanPasteItFromWindowsPath() {
+    fun `should strip the quotes from a file so we can paste it from a Windows path`() {
         // Given a file that we know exists, with quotes
         var license = "\"LICENSE.txt\""
 

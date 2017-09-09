@@ -1,6 +1,6 @@
 Feature: Full Journey
 
-Scenario: Can load a typical JIRA csv and calculate the distribution from it
+Scenario: Can load a typical JIRA csv and calculate the distribution of closed tickets per week from it
 
 Given a typical JIRA export "/example_files/closed_only_JIRA.csv"
 When I import it into Montecarluni

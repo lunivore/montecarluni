@@ -15,10 +15,10 @@ class CleardownSteps(val world: World) : Scenario(world) {
 
         Then("^all the relevant fields should be empty") {
             assertEquals("", findInRoot<TextField> { it.id == "filenameInput" }.value.text)
-            assertEquals(0, findInRoot<TableView<Any>>{it.id == "distributionOutput"}.value.items.size)
+            assertEquals(0, findInRoot<TableView<Any>>{it.id == "weeklyDistributionOutput"}.value.items.size)
             assertFalse(findInRoot<CheckBox>{it.id =="useSelectionInput"}.value.isSelected)
             assertNull(findInRoot<DatePicker>{ it.id == "forecastStartDateInput"}.value.value)
-            assertEquals("", findInRoot<TextField> { it.id == "numStoriesForecastInput"}.value.text)
+            assertEquals("", findInRoot<TextField> { it.id == "numWorkItemsForecastInput"}.value.text)
             assertEquals(0, findInRoot<TableView<Any>> {it.id == "forecastOutput"}.value.items.size)
         }
     }

@@ -1,9 +1,9 @@
-Feature: Forecasting
+Feature: Forecasting using distribution of closed work items per week
 
 Scenario: Can make forecast using CSV file imported from JIRA
 
 Given "/example_files/closed_only_JIRA.csv" is imported
-When I ask for a forecast for the next 100 stories
+When I ask for a forecast for the next 100 work items
 Then I should see a percentage forecast
 """
 100% | 2017-09-21
@@ -32,7 +32,7 @@ Then I should see a percentage forecast
 Scenario: Can set a start date for the forecast
 
 Given "/example_files/closed_only_JIRA.csv" is imported
-When I ask for a forecast for 100 stories starting on 2017-06-01
+When I ask for a forecast for 100 work items starting on 2017-06-01
 Then I should see a percentage forecast
 """
 100% | 2017-11-16
@@ -61,7 +61,7 @@ Then I should see a percentage forecast
 Scenario: Can select a range to use for the forecast
 
 Given "/example_files/closed_only_JIRA.csv" is imported
-When I ask for a forecast for 100 stories using rows 4 onwards
+When I ask for a forecast for 100 work items using rows 4 onwards
 Then I should see a percentage forecast
 """
 100% | 2017-08-24

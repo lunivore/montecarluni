@@ -2,6 +2,7 @@ package com.lunivore.montecarluni.engine
 
 import com.lunivore.montecarluni.Events
 import com.lunivore.montecarluni.model.Record
+import com.lunivore.montecarluni.model.UserNotification
 import com.opencsv.CSVReader
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -18,7 +19,7 @@ import java.time.format.DateTimeFormatter
  *
  * Formats with the month at the start do not make sense and will not be supported.
  */
-class RecordCreator(events: Events, val dateFormatParser : (List<String>) -> DateTimeFormatter) {
+class RecordCreator(private val events: Events, private val dateFormatParser : (List<String>) -> DateTimeFormatter) {
 
     constructor(events : Events) : this(events, DateFormatParser()){
 
@@ -44,10 +45,17 @@ class RecordCreator(events: Events, val dateFormatParser : (List<String>) -> Dat
         val candidatesForDateFormat = resolveDatesAsLines.plus(updatedDatesAsLines).filter { it.isNotEmpty() }
         val dateFormat = dateFormatParser(candidatesForDateFormat)
 
-        return resolveDatesAsLines.zip(updatedDatesAsLines).map {
-            Record(if (it.first.isEmpty()) null else LocalDateTime.parse(it.first, dateFormat),
-                    if (it.second.isEmpty()) null else LocalDateTime.parse(it.second, dateFormat)) }
+        val result = resolveDatesAsLines.zip(updatedDatesAsLines)
+        if (result.any {it.first.isEmpty() && it.second.isEmpty()}) {
+            events.messageNotification.push(UserNotification("Could not find resolved or last updated dates for some records"))
+            return listOf()
+        } else {
 
+            return result.map {
+                Record(if (it.first.isEmpty()) null else LocalDateTime.parse(it.first, dateFormat),
+                        if (it.second.isEmpty()) null else LocalDateTime.parse(it.second, dateFormat))
+            }
+        }
     }
 
     private fun extractDate(lines: MutableList<Array<String>>, resolvedIndex: Int): List<String> {

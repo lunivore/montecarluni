@@ -22,23 +22,23 @@ class ForecastSteps(val world: World) : Scenario(world) {
             findInRoot<DatePicker>({it.id == "forecastStartDateInput"})?.value.pickDateAndStir(date)
         })
 
-        When("^I ask for a forecast for the next (\\d+) stories$", { number: Int ->
+        When("^I ask for a forecast for the next (\\d+) work items$", { number: Int ->
             requestForecast(number)
         })
 
-        When("^I ask for a forecast for (\\d+) stories starting on (.*)$", {number: Int, date : String ->
+        When("^I ask for a forecast for (\\d+) work items starting on (.*)$", {number: Int, date : String ->
             findInRoot<DatePicker>({it.id == "forecastStartDateInput"})?.value.pickDateAndStir(date)
             requestForecast(number)
         })
 
-        Given("^I asked for a forecast for (\\d+) stories using rows (\\d+) onwards", {numberOfStories: Int, fromRow : Int ->
+        Given("^I asked for a forecast for (\\d+) work items using rows (\\d+) onwards", {numberOfWorkItems: Int, fromRow : Int ->
             SelectionSteps(world).select(fromRow)
-            requestForecast(numberOfStories)
+            requestForecast(numberOfWorkItems)
         })
 
-        When("^I ask for a forecast for (\\d+) stories using rows (\\d+) onwards$", {numberOfStories: Int, fromRow : Int ->
+        When("^I ask for a forecast for (\\d+) work items using rows (\\d+) onwards$", {numberOfWorkItems: Int, fromRow : Int ->
             SelectionSteps(world).select(fromRow)
-            requestForecast(numberOfStories)
+            requestForecast(numberOfWorkItems)
         })
 
         Then("^I should see a percentage forecast$", { expectedForecast: String ->
@@ -62,7 +62,7 @@ class ForecastSteps(val world: World) : Scenario(world) {
     }
 
     private fun requestForecast(number: Int) {
-        findInRoot<TextField>({ it.id == "numStoriesForecastInput" }).value.setTextAndStir(number.toString())
+        findInRoot<TextField>({ it.id == "numWorkItemsForecastInput" }).value.setTextAndStir(number.toString())
         findInRoot<Button>({ it.id == "forecastButton" }).value.fireAndStir()
     }
 }

@@ -1,40 +1,30 @@
 package com.lunivore.montecarluni.engine
 
-import com.lunivore.montecarluni.Events
-import com.lunivore.montecarluni.model.*
+import com.lunivore.montecarluni.model.DateRange
+import com.lunivore.montecarluni.model.Record
+import com.lunivore.montecarluni.model.WorkItemsClosedInWeek
 import org.apache.logging.log4j.LogManager
 import java.time.LocalDateTime
 
-class DistributionCalculator(val events: Events) {
+class WeeklyDistributionCalculator() {
 
     companion object {
         val logger = LogManager.getLogger()!!
     }
 
-    init {
-        events.recordsParsedNotification.subscribe {
-            if (!it.any { it.getResolvedOrLastUpdatedDate() == null }) {
-                events.weeklyDistributionChangeNotification.push(WeeklyDistribution(calculateDistribution(it)))
-            } else {
-                logger.debug("Distribution had a problem:\n{}", it.map { "res: " + it.resolvedDate + " upd: " + it.lastUpdatedDate })
-                events.messageNotification.push(UserNotification("Some of the records had neither a resolved nor an updated date"))
-            }
-        }
-        events.clearRequest.subscribe { events.weeklyDistributionChangeNotification.push(WeeklyDistribution.EMPTY) }
-    }
 
     val neverUsed = LocalDateTime.of(1970, 1, 1, 0, 0)
 
-    private fun calculateDistribution(completedDates: List<Record>): List<StoriesClosedInWeek> {
+    fun calculateDistribution(completedDates: List<Record>): List<WorkItemsClosedInWeek> {
 
         val dateRange = findFirstAndLastCompletedDates(completedDates)
         val dateBrackets = calculateDateBrackets(dateRange)
 
         return dateBrackets.map {
             bracket ->
-            StoriesClosedInWeek(DateRange(bracket.first.toLocalDate(), bracket.second.toLocalDate().minusDays(1)),
+            WorkItemsClosedInWeek(DateRange(bracket.first.toLocalDate(), bracket.second.toLocalDate().minusDays(1)),
             completedDates.count {
-                val date = it.getResolvedOrLastUpdatedDate()
+                val date = it.resolvedOrLastUpdatedDate
                 date != null &&
                         with(date) {
                             (isAfter(bracket.first) &&
@@ -63,10 +53,10 @@ class DistributionCalculator(val events: Events) {
 
     private fun findFirstAndLastCompletedDates(completedDates: List<Record>): Pair<LocalDateTime, LocalDateTime> {
 
-        val earliestCompletedDate = completedDates.minBy { it.getResolvedOrLastUpdatedDate() ?: neverUsed }
-            ?.getResolvedOrLastUpdatedDate()?.toLocalDate()?.atStartOfDay()
-        val lastCompletedDate = completedDates.maxBy { it.getResolvedOrLastUpdatedDate() ?: neverUsed }
-                ?.getResolvedOrLastUpdatedDate()?.plusDays(1)?.toLocalDate()?.atStartOfDay()
+        val earliestCompletedDate = completedDates.minBy { it.resolvedOrLastUpdatedDate ?: neverUsed }
+                ?.resolvedOrLastUpdatedDate?.toLocalDate()?.atStartOfDay()
+        val lastCompletedDate = completedDates.maxBy { it.resolvedOrLastUpdatedDate ?: neverUsed }
+                ?.resolvedOrLastUpdatedDate?.plusDays(1)?.toLocalDate()?.atStartOfDay()
 
         if (earliestCompletedDate == null || lastCompletedDate == null) {
             throw Exception("Could not find records to parse for date brackets. (Montecarluni should checked for this already!)")
